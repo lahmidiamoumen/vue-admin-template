@@ -2,28 +2,49 @@ import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
-const getDefaultState = () => {
-  return {
-    token: getToken(),
-    name: '',
-    avatar: ''
-  }
+const state = {
+  token: getToken(),
+  nom: '',
+  prenom: '',
+  email: '',
+  fonction: '',
+  auProfilDe: '',
+  adresse: '',
+  etablissement: '',
+  telephone: '',
+  roles: []
 }
 
-const state = getDefaultState()
-
 const mutations = {
-  RESET_STATE: (state) => {
-    Object.assign(state, getDefaultState())
-  },
   SET_TOKEN: (state, token) => {
     state.token = token
   },
-  SET_NAME: (state, name) => {
-    state.name = name
+  SET_NAME: (state, token) => {
+    state.nom = token
   },
-  SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar
+  SET_PRENOM: (state, token) => {
+    state.prenom = token
+  },
+  SET_FONC: (state, token) => {
+    state.fonction = token
+  },
+  SET_PROFIL: (state, token) => {
+    state.auProfilDe = token
+  },
+  SET_ADDR: (state, adresse) => {
+    state.adresse = adresse
+  },
+  SET_ETABL: (state, etablissement) => {
+    state.etablissement = etablissement
+  },
+  SET_TELE: (state, telephone) => {
+    state.telephone = telephone
+  },
+  SET_EMAIL: (state, avatar) => {
+    state.email = avatar
+  },
+  SET_ROLES: (state, roles) => {
+    state.roles = roles
   }
 }
 
@@ -33,9 +54,9 @@ const actions = {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
+        const token = 'Bearer ' + response.data.token
+        commit('SET_TOKEN', token)
+        setToken(token)
         resolve()
       }).catch(error => {
         reject(error)
@@ -47,16 +68,32 @@ const actions = {
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
-        const { data } = response
+        console.log(data)
+        const data = response.data
+        console.log(data)
 
         if (!data) {
-          return reject('Verification failed, please Login again.')
+          reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar } = data
+        const { nom, prenom, fonction, etablissement, adresse, telephone, email, auProfilDe, userName, grade } = data.user
 
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
+        // roles must be a non-empty array
+        if (!grade || grade.length <= 0) {
+          reject('getInfo: roles must be a non-null array!')
+        }
+        console.log(nom)
+
+        commit('SET_NAME', nom)
+        commit('SET_PRENOM', prenom)
+        commit('SET_FONC', fonction)
+        commit('SET_PROFIL', auProfilDe)
+        commit('SET_ETABL', etablissement)
+        commit('SET_TELE', telephone)
+        commit('SET_NAME', userName)
+        commit('SET_EMAIL', email)
+        commit('SET_ADDR', adresse)
+        commit('SET_ROLES', grade)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -65,12 +102,18 @@ const actions = {
   },
 
   // user logout
-  logout({ commit, state }) {
+  logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
-        removeToken() // must remove  token  first
+        commit('SET_TOKEN', '')
+        commit('SET_ROLES', [])
+        removeToken()
         resetRouter()
-        commit('RESET_STATE')
+
+        // reset visited views and cached views
+        // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
+        dispatch('tagsView/delAllViews', null, { root: true })
+
         resolve()
       }).catch(error => {
         reject(error)
@@ -81,11 +124,13 @@ const actions = {
   // remove token
   resetToken({ commit }) {
     return new Promise(resolve => {
-      removeToken() // must remove  token  first
-      commit('RESET_STATE')
+      commit('SET_TOKEN', '')
+      commit('SET_ROLES', [])
+      removeToken()
       resolve()
     })
   }
+
 }
 
 export default {
@@ -94,4 +139,3 @@ export default {
   mutations,
   actions
 }
-
