@@ -7,6 +7,7 @@ import user from './modules/user'
 import files from './modules/files'
 import tagsView from './modules/tagsView'
 import permission from './modules/permission'
+import essais from './modules/essaiClinique'
 
 Vue.use(Vuex)
 
@@ -17,7 +18,8 @@ const store = new Vuex.Store({
     user,
     files,
     tagsView,
-    permission
+    permission,
+    essais
   },
   getters
 })

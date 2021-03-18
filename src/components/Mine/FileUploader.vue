@@ -1,16 +1,15 @@
 <template>
   <div class="app-container">
     <el-card shadow="hover" :body-style="{ padding: '20px' }">
-      <div slot="header">
-        <span>{{ contextName }}</span>
-      </div>
-      <p>{{ contextDescription }}</p>
+      <small style="margin-bottom: 10px">{{ contextDescription }}</small>
       <el-upload
         class="upload-demo"
+        style="width: 100%"
         :action="'http://localhost:8080/api/essais/uploadEssaiClinique'"
         :on-error="handelError"
         :on-success="handelSuccess"
         :on-preview="handlePreview"
+        drag
         :on-remove="handleRemove"
         :before-upload="beforeUpload"
         :before-remove="beforeRemove"
@@ -21,8 +20,9 @@
         accept="application/pdf"
         :file-list="fileList"
       >
-        <el-button :disabled="!view" icon="el-icon-plus" size="small" type="primary">Selectionner le ficher</el-button>
-        <div slot="tip" class="el-upload__tip"> pdf fichies moins de 2mb</div>
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">Déposez le fichier ici ou <em>cliquez pour télécharger</em></div>
+          <div slot="tip" class="el-upload__tip"> pdf fichies moins de 2mb</div>
       </el-upload>
     </el-card>
   </div>
@@ -36,7 +36,9 @@ export default {
     contextName: { type: String, default: '' },
     contextDescription: { type: String, default: '' },
     commit: { type: String, default: '' },
-    view: { type: Boolean, default: true }},
+    view: { type: Boolean, default: true },
+    file: { type: String, default: '' }
+  },
   data() {
     return {
       myHeaders: { 'authorization': this.$store.state.user.token },
@@ -71,11 +73,21 @@ export default {
       console.log(file)
     },
     handleExceed(files, fileList) {
-      this.$message.warning(`The limit is 3, you selected ${files.length} files this time, add up to ${files.length + fileList.length} totally`)
+      this.$message.warning(`un seul fichier uniquement`)
     },
     beforeRemove(file, fileList) {
-      return this.$confirm(`Cancel the transfert of ${file.name} ?`)
+      return this.$confirm(`Annuler la transformation de ${file.name} ?`)
     }
   }
 }
 </script>
+<style>
+.el-upload-dragger {
+    margin-top: 12px;
+    width: unset; 
+    height: 150px;
+}
+.el-upload {
+  width: 100%;
+}
+</style>

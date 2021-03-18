@@ -1,27 +1,21 @@
 <template>
   <div class="app-container">
     <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column align="center" label="ID" width="80">
+      <el-table-column align="center" label="Essai" width="180px">
         <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
+          <span>{{ scope.row.essai }}</span>
         </template>
       </el-table-column>
-
+      <el-table-column width="300px" align="center" label="Titre">
+        <template slot-scope="{row}">
+          <router-link :to="'/essai-liste/edit/'+row._id" class="link-type">
+            <span>{{ row.titre }}</span>
+          </router-link>
+        </template>
+      </el-table-column>
       <el-table-column width="180px" align="center" label="Date">
         <template slot-scope="scope">
-          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="120px" align="center" label="Author">
-        <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="100px" label="Importance">
-        <template slot-scope="scope">
-          <svg-icon v-for="n in +scope.row.importance" :key="n" icon-class="star" class="meta-item__icon" />
+          <span>{{ timeSince(scope.row.createdAt) }}</span>
         </template>
       </el-table-column>
 
@@ -33,17 +27,17 @@
         </template>
       </el-table-column>
 
-      <el-table-column min-width="300px" label="Title">
+      <el-table-column min-width="120px" label="Objectif">
         <template slot-scope="{row}">
-          <router-link :to="'/example/edit/'+row.id" class="link-type">
-            <span>{{ row.title }}</span>
+          <router-link :to="'/essai-liste/edit/'+row._id" class="link-type">
+            <span>{{ row.objectif }}</span>
           </router-link>
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="Actions" width="120">
         <template slot-scope="scope">
-          <router-link :to="'/example/edit/'+scope.row.id">
+          <router-link :to="'/essai-liste/edit/'+scope.row._id">
             <el-button type="primary" size="small" icon="el-icon-edit">
               Edit
             </el-button>
@@ -57,7 +51,7 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/article'
+import { fetchList } from '@/api/essai'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
@@ -75,7 +69,7 @@ export default {
   },
   data() {
     return {
-      list: null,
+      list: [],
       total: 0,
       listLoading: true,
       listQuery: {
@@ -92,9 +86,34 @@ export default {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
-        this.total = response.data.total
+        this.total = Number.isNaN(parseInt(response.data.total)) ? 0 : parseInt(response.data.total)
         this.listLoading = false
       })
+    },
+    timeSince(date) {
+      date = new Date(date)
+      var seconds = Math.floor((new Date() - date) / 1000)
+      var interval = seconds / 31536000
+      if (interval > 1) {
+        return Math.floor(interval) + ' years ago'
+      }
+      interval = seconds / 2592000
+      if (interval > 1) {
+        return Math.floor(interval) + ' months ago'
+      }
+      interval = seconds / 86400
+      if (interval > 1) {
+        return Math.floor(interval) + ' days ago'
+      }
+      interval = seconds / 3600
+      if (interval > 1) {
+        return Math.floor(interval) + ' hours ago'
+      }
+      interval = seconds / 60
+      if (interval > 1) {
+        return Math.floor(interval) + ' minutes ago'
+      }
+      return Math.floor(seconds) + ' seconds ago'
     }
   }
 }

@@ -10,7 +10,7 @@ export function fetchList(query) {
 
 export function fetchArticle(id) {
   return request({
-    url: '/vue-element-admin/article/detail',
+    url: '/essais/getEssaiFullData',
     method: 'get',
     params: { id }
   })
@@ -24,9 +24,9 @@ export function fetchPv(pv) {
   })
 }
 
-export function createArticle(data) {
+export function createEssai(data) {
   return request({
-    url: '/vue-element-admin/article/create',
+    url: '/essais/createEssaiClinique',
     method: 'post',
     data
   })

@@ -1,19 +1,18 @@
 <template>
-  <div class="createPost-container">
-    <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
+  <div class="dashboard-editor-container">
+    <aside>
+      <b> ANNEXE B </b>
+      Declaration D'intention   de realisation d'essai d'un produit pharmaceutique.
+    </aside>
+    <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container" label-width="330px">
       <div class="createPost-main-container">
-        <el-card shadow="never" class="app-container" :body-style="{ padding: '5px', textAlign: 'center'}">
-          <b> ANNEXE B </b>
-          Declaration D'intention   de realisation d'essai d'un produit pharmaceutique.
-        </el-card>
         <el-steps class="app-container" :active="2" finish-status="success" align-center>
           <el-step title="Etape 1" description="les fichiers à fournir" />
           <el-step title="Etape 2" description="Formulaire d'annex - B" />
           <el-step title="Etape 3" description="Soumission du dossier" />
         </el-steps>
         <br>
-
-        <el-card shadow="hover" class="app-container" :body-style="{ padding: '20px 60px',marging: '20px' }">
+        <el-card shadow="hover" class="app-container" :body-style="{ padding: '0px 100px',marging: '20px' }">
           <el-col :span="24">
             <el-form-item style="margin-bottom: 40px;" prop="titre">
               <MDinput v-model="postForm.titre" :maxlength="100" required>
@@ -42,49 +41,41 @@
               </el-radio-group>
             </el-form-item>
 
-            <el-card shadow="never" :body-style="{ padding: '20px' }">
-              <div slot="header">
-                <span>Essai</span>
-              </div>
-              <el-col :span="16" :offset="2">
-                <template>
-                  <el-form-item label="Essai:" required prop="essai" size="small">
-                    <el-select v-model="postForm.essai" filterable placeholder="Select" style="width: 90%;">
-                      <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      />
-                    </el-select>
-                  </el-form-item>
-                </template>
-              </el-col>
-              <el-col :span="16" :offset="2">
-                <el-form-item label="autre, à préciser :">
-                  <el-input v-model="postForm.essai" :rows="1" style="width: 90%;" type="textarea" class="article-textarea" autosize placeholder="Aa..." />
-                </el-form-item>
-              </el-col>
-            </el-card>
-            <br>
-            <el-row :gutter="20">
-              <el-col :span="12">
-                <el-form-item label="Etude de bioéquivalence" required>
-                  <el-input v-model="postForm.etudeBioequivalence" />
-                </el-form-item>
-              </el-col>
-            </el-row>
-
+                  <el-row :gutter="0">
+                    <br>
+                     <template>
+                      <el-form-item label="Essai:" required prop="essai" >
+                        <el-col :span="11" :offset="0">
+                          <el-select v-model="postForm.essai" filterable placeholder="Select" style="width: 100%;">
+                            <el-option
+                              v-for="item in options"
+                              :key="item.value"
+                              :label="item.label"
+                              :value="item.value"
+                           />
+                          </el-select>
+                          </el-col>
+                          <el-col :span="1" :offset="1" class="line">ou</el-col>
+                          <el-col :span="11" :offset="0">
+                              <el-input v-model="postForm.essai" :rows="1" placeholder="autre, à préciser :" type="textarea" class="article-textarea" autosize />
+                          </el-col>
+                      </el-form-item>
+                      </template>
+                  </el-row>
+              <br>
+              <el-form-item label="Etude de bioéquivalence" required>
+                <el-input v-model="postForm.etudeBioequivalence" />
+              </el-form-item>
             <div class="postInfo-container">
-              <el-row>
-                <el-col :span="8" :offset="0">
+              <el-row :gutter="0">
+                <el-col :span="12" :offset="0">
                   <el-form-item label="Date prévue pour le début de la recherche">
-                    <el-date-picker v-model="displayTime" type="date" format="yyyy-MM-dd" style="width: 90%;" placeholder="Select date and time" />
+                    <el-date-picker v-model="displayTime" type="date" format="yyyy-MM-dd" style="width: 100%;" placeholder="Select date and time" />
                   </el-form-item>
                 </el-col>
-                <el-col :span="4">
-                  <el-form-item label="Durée prévue">
-                    <el-input-number v-model="postForm.dureePrevuDebut" :min="0" size="medium" />
+                <el-col :span="12">
+                  <el-form-item label="Durée prévue" label-width="140px">
+                    <el-input-number v-model="postForm.dureePrevuDebut" style="width: 80%;" :min="0" size="medium" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -93,52 +84,40 @@
           </el-col>
         </el-card>
         <br>
-        <el-card shadow="hover" class="app-container" :body-style="{ padding: '20px'}">
-          <div slot="header">
-            <span class="el-upload__tip">MEDICAMENT OU PRODUIT ETUDIE</span>
-          </div>
-
-          <el-row :gutter="0">
-            <el-col :span="10" :offset="0">
-              <el-form-item label="Dénomination spéciale" label-width="360px">
-                <el-input v-model="postForm.medicamentEtudie.denominationSpeciale" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="10" :offset="0">
-              <el-form-item label="Nom de code" label-width="180px">
-                <el-input v-model="postForm.medicamentEtudie.nomDeCode" />
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-form-item label="Dénomination scientifique et D.C.I du (des) principe(s) actif(s)" label-width="360px">
-            <el-input v-model="postForm.medicamentEtudie.DCI" style="width:56%" />
+        <el-card shadow="hover" class="app-container" :body-style="{ padding: '0px 100px'}">
+          <p class="headon">MEDICAMENT OU PRODUIT ETUDIE</p><br>
+          <el-form-item label="Dénomination spéciale">
+            <el-input v-model="postForm.medicamentEtudie.denominationSpeciale" />
+          </el-form-item>
+          <el-form-item label="Nom de code">
+            <el-input v-model="postForm.medicamentEtudie.nomDeCode" />
+          </el-form-item>
+          <el-form-item label="Dénomination scientifique et D.C.I du (des) principe(s) actif(s)" >
+            <el-input v-model="postForm.medicamentEtudie.DCI" />
           </el-form-item>
 
-          <el-form-item label="Composition qualitative et quantitative" label-width="360px">
-            <el-input v-model="postForm.medicamentEtudie.compositionQualitativeQuantitative" style="width:56%" />
+          <el-form-item label="Composition qualitative et quantitative" >
+            <el-input v-model="postForm.medicamentEtudie.compositionQualitativeQuantitative" />
           </el-form-item>
 
-          <el-form-item label="Posologie" label-width="360px">
-            <el-input v-model="postForm.medicamentEtudie.Posologie" style="width:40%" />
+          <el-form-item label="Posologie" >
+            <el-input v-model="postForm.medicamentEtudie.Posologie" />
           </el-form-item>
 
-          <el-form-item label="Principe actif nouveau : " label-width="360px" required>
-            <el-radio-group v-model="postForm.medicamentEtudie.principeActif" label-width="360px" size="mini">
+          <el-form-item label="Principe actif nouveau : "  required>
+            <el-radio-group v-model="postForm.medicamentEtudie.principeActif"  size="mini">
               <el-radio :label="true"> Oui </el-radio>
               <el-radio :label="false"> Non </el-radio>
             </el-radio-group>
           </el-form-item>
 
-          <el-form-item label="Fabricant(s)" label-width="360px">
-            <el-input v-model="postForm.medicamentEtudie.fabricant" placeholder="nom(s) ou dénomination(s) et lieu(x) de fabrication" style="width:60%" />
+          <el-form-item label="Fabricant(s)" >
+            <el-input v-model="postForm.medicamentEtudie.fabricant" placeholder="nom(s) ou dénomination(s) et lieu(x) de fabrication" />
           </el-form-item>
+          <br>
+          <el-divider content-position="center">D.E ou A.M.M</el-divider>
 
-          <el-row :gutter="20">
-            <el-col :span="5" :offset="0"><h1 class="el-upload__tip" style="float: right;">D.E ou A.M.M</h1></el-col>
-            <el-col :span="18" :offset="0"> <el-divider direction="horizontal" style="width:50%" width="50%" content-position="left" /></el-col>
-          </el-row>
-
-          <el-form-item label="Algérie :" required size="small" label-width="360px">
+          <el-form-item label="Algérie :" required size="small" >
             <el-radio-group v-model="postForm.medicamentEtudie.Algerie">
               <el-radio label="oui" border size="mini" />
               <el-radio label="non" border size="mini" />
@@ -147,94 +126,82 @@
               <el-radio label="retrait" border size="mini" />
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="Etranger " label-width="360px">
-            <el-input v-model="postForm.medicamentEtudie.Etranger" :disabled="postForm.medicamentEtudie.Algerie !== 'non'" placeholder="nom(s) ou dénomination(s) et lieu(x) de fabrication" style="width:60%" />
+          <el-form-item label="Etranger " >
+            <el-input v-model="postForm.medicamentEtudie.Etranger" :disabled="postForm.medicamentEtudie.Algerie !== 'non'" placeholder="nom(s) ou dénomination(s) et lieu(x) de fabrication" />
+          </el-form-item>
+
+        </el-card>
+        <br>
+        <el-card shadow="hover" class="app-container" :body-style="{ padding: '0px 100px'}">
+         <p class="headon">MEDICAMENT OU PRODUIT DE REFERENCE</p>
+        <br>
+          <el-form-item label="Dénomination spéciale" >
+            <el-input v-model="postForm.medicamentReference.denominationSpeciale" />
+          </el-form-item>
+          <el-form-item label="Dénomination scientifique et DCI du (des) principe(s) actif(s)" >
+            <el-input v-model="postForm.medicamentReference.DCI" />
+          </el-form-item>
+
+          <el-form-item label="Forme pharmaceutique" >
+            <el-input v-model="postForm.medicamentReference.formePharmaceutique" placeholder="pharmacopée" />
+          </el-form-item>
+
+          <el-form-item label="Composition qualitative et quantitative en principe actifs" >
+            <el-input v-model="postForm.medicamentReference.compositionQualitativeQuantitative" placeholder="en utilisants les dénominations communes internationales" />
+          </el-form-item>
+
+          <el-form-item label="Posologie  "  required>
+            <el-input v-model="postForm.medicamentReference.posologie" />
+          </el-form-item>
+
+          <el-form-item label="Fabricant(s)" >
+            <el-input v-model="postForm.medicamentReference.fabricant" placeholder="nom(s) ou dénomination(s) et lieu(x) de fabrication" />
+          </el-form-item>
+
+        </el-card>
+        <br>
+        <el-card shadow="hover" class="app-container" :body-style="{ padding: '0px 100px'}">
+          <p class="headon">PLACEBO</p> <br>
+          <el-form-item label="Forme pharmaceutique" >
+            <el-input v-model="postForm.placebo.formePharmaceutique" placeholder="pharmacopée" />
+          </el-form-item>
+          <el-form-item label="Fabricant(s)" >
+            <el-input v-model="postForm.placebo.fabricant" placeholder="nom(s) ou dénomination(s) et lieu(x) de fabrication" />
           </el-form-item>
 
         </el-card>
         <br>
         <el-card shadow="hover" class="app-container" :body-style="{ padding: '20px'}">
-          <div slot="header">
-            <span class="el-upload__tip">MEDICAMENT OU PRODUIT DE REFERENCE</span>
-          </div>
+          <p class="headon">PERSONNES SE PRETANT A LA RECHERCHE</p>
+          <br>
 
-          <el-row :gutter="0">
-            <el-col :span="10" :offset="0">
-              <el-form-item label="Dénomination spéciale" label-width="360px">
-                <el-input v-model="postForm.medicamentReference.denominationSpeciale" />
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-form-item label="Dénomination scientifique et DCI du (des) principe(s) actif(s)" label-width="360px">
-            <el-input v-model="postForm.medicamentReference.DCI" style="width:60%" />
+          <el-form-item label="Nombre prévu de personnes" >
+            <el-input-number v-model="postForm.personne.prevu" :min="0" size="medium" placeholder="Aa..." style="width:20%" />
           </el-form-item>
 
-          <el-form-item label="Forme pharmaceutique" label-width="360px">
-            <el-input v-model="postForm.medicamentReference.formePharmaceutique" placeholder="pharmacopée" style="width:60%" />
+          <el-form-item label="Durée du traitement ou de la participation par personne" >
+            <el-input-number v-model="postForm.personne.duree" :min="0" size="medium" placeholder="Aa..." style="width:20%" />
           </el-form-item>
 
-          <el-form-item label="Composition qualitative et quantitative en principe actifs" label-width="360px">
-            <el-input v-model="postForm.medicamentReference.compositionQualitativeQuantitative" placeholder="en utilisants les dénominations communes internationales" style="width:60%" />
+          <el-form-item label="Indication thérapeutique" >
+            <el-input v-model="postForm.personne.therapeutique" placeholder="Aa..." />
           </el-form-item>
 
-          <el-form-item label="Posologie  " label-width="360px" required>
-            <el-input v-model="postForm.medicamentReference.posologie" style="width:60%" />
+          <el-form-item label="Principaux critères d'inclusion" >
+            <el-input v-model="postForm.personne.criteres" placeholder="Aa..." />
           </el-form-item>
 
-          <el-form-item label="Fabricant(s)" label-width="360px">
-            <el-input v-model="postForm.medicamentReference.fabricant" placeholder="nom(s) ou dénomination(s) et lieu(x) de fabrication" style="width:60%" />
-          </el-form-item>
-
-        </el-card>
-        <br>
-        <el-card shadow="hover" class="app-container" :body-style="{ padding: '20px'}">
-          <div slot="header">
-            <span class="el-upload__tip">PLACEBO</span>
-          </div>
-
-          <el-form-item label="Forme pharmaceutique" label-width="360px">
-            <el-input v-model="postForm.placebo.formePharmaceutique" placeholder="pharmacopée" style="width:60%" />
-          </el-form-item>
-
-          <el-form-item label="Fabricant(s)" label-width="360px">
-            <el-input v-model="postForm.placebo.fabricant" placeholder="nom(s) ou dénomination(s) et lieu(x) de fabrication" style="width:60%" />
-          </el-form-item>
-
-        </el-card>
-        <br>
-        <el-card shadow="hover" class="app-container" :body-style="{ padding: '20px'}">
-          <div slot="header">
-            <span class="el-upload__tip">PERSONNES SE PRETANT A LA RECHERCHE</span>
-          </div>
-
-          <el-form-item label="Nombre prévu de personnes" label-width="360px">
-            <el-input-number v-model="postForm.personne.prevu" :min="0" size="medium" placeholder="Aa..." style="width:60%" />
-          </el-form-item>
-
-          <el-form-item label="Indication thérapeutique" label-width="360px">
-            <el-input v-model="postForm.personne.therapeutique" placeholder="Aa..." style="width:60%" />
-          </el-form-item>
-
-          <el-form-item label="Principaux critères d'inclusion" label-width="360px">
-            <el-input v-model="postForm.personne.criteres" placeholder="Aa..." style="width:60%" />
-          </el-form-item>
-
-          <el-form-item label="Durée du traitement ou de la participation par personne" label-width="360px">
-            <el-input-number v-model="postForm.personne.duree" :min="0" size="medium" placeholder="Aa..." style="width:60%" />
-          </el-form-item>
         </el-card>
 
         <br>
         <el-card shadow="hover" class="app-container" :body-style="{ padding: '20px'}">
-          <div slot="header">
-            <span class="el-upload__tip">COMITE D'ETHIQUE</span>
-          </div>
-
-          <el-form-item label="Comité (nom et adresse)" label-width="360px">
-            <el-input v-model="postForm.commite.info" placeholder="Aa..." style="width:60%" />
+          <p class="headon">COMITE D'ETHIQUE</p>
+          <br>
+          <el-form-item label="Comité (nom et adresse)" >
+            <el-input v-model="postForm.commite.info" placeholder="Aa..." />
           </el-form-item>
-          <el-form-item label="Date de l'avis" label-width="360px">
-            <el-date-picker v-model="displayComiteDate" type="date" format="yyyy-MM-dd" style="width:60%" placeholder="Select date and time" />
+          <el-form-item label="Date de l'avis" >
+            <el-date-picker v-model="displayComiteDate" type="date" format="yyyy-MM-dd"  placeholder="Selectionnez la dete" />
           </el-form-item>
         </el-card>
         <br>
@@ -265,7 +232,7 @@ const defaultForm = {
   phaseExperimentationClinique: '',
   essai: '',
   etudeBioequivalence: '',
-  datePrevuDebut: Date.now(),
+  datePrevuDebut: '',
   dureePrevuDebut: 0,
   medicament: {
     Denomination: '',
@@ -309,7 +276,7 @@ const defaultForm = {
   },
   commite: {
     info: '',
-    date: Date.now()
+    date: ''
   },
   status: ''
 }
@@ -404,9 +371,6 @@ export default {
     }
   },
   computed: {
-    contentShortLength() {
-      return this.postForm.content_short.length
-    },
     displayTime: {
       // set and get is useful when the data
       // returned by the back end api is different from the front end
@@ -444,81 +408,79 @@ export default {
     this.tempRoute = Object.assign({}, this.$route)
   },
   methods: {
-
     submitForm() {
-      console.log(this.postForm)
+      const data = { ...this.postForm, ...this.$store.state.files }
+      console.log(data)
       this.$refs.postForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$notify({
-            title: '成功',
-            message: '发布文章成功',
-            type: 'success',
-            duration: 2000
+          this.$store.dispatch('essais/createEssai', data).then(() => {
+            this.$notify({
+              title: 'published',
+              message: 'success',
+              type: 'success',
+              duration: 2000
+            })
+            this.loading = false
+          }).catch((err) => {
+            console.log(err)
+            this.$notify({
+              title: 'Error',
+              message: err,
+              type: 'error',
+              duration: 2000
+            })
+            this.loading = false
+            console.log(err)
           })
           this.postForm.status = 'published'
           this.loading = false
         } else {
+          this.$message({
+            message: '请填写必要的标题和内容',
+            type: 'warning'
+          })
           console.log('error submit!!')
           return false
         }
       })
-    },
-    draftForm() {
-      if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
-        this.$message({
-          message: '请填写必要的标题和内容',
-          type: 'warning'
-        })
-        return
-      }
-      this.$message({
-        message: '保存成功',
-        type: 'success',
-        showClose: true,
-        duration: 1000
-      })
-      this.postForm.status = 'draft'
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/mixin.scss";
 
-.createPost-container {
-  position: relative;
-
-  .createPost-main-container {
-    padding: 40px 45px 20px 50px;
-
-    .postInfo-container {
-      position: relative;
-      @include clearfix;
-      margin-bottom: 10px;
-
-      .postInfo-container-item {
-        float: left;
-      }
-    }
-  }
-
-  .word-counter {
-    width: 40px;
-    position: absolute;
-    right: 10px;
-    top: 0px;
-  }
+.headon {
+  text-align: center;
+  font-size: 19px;
+  font-weight: 100;
+  color: #4a4a4a;
 }
 
-.article-textarea ::v-deep {
-  textarea {
-    padding-right: 40px;
-    resize: none;
-    border: none;
-    border-radius: 0px;
-    border-bottom: 1px solid #bfcbd9;
+.dashboard-editor-container {
+  background-color: #fcfcfc;
+  min-height: 100vh;
+  padding: 50px 60px 0px;
+  padding-bottom: 80px;
+  .pan-info-roles {
+    font-size: 12px;
+    font-weight: 700;
+    color: #333;
+    display: block;
+  }
+  .info-container {
+    position: relative;
+    margin-left: 190px;
+    height: 150px;
+    line-height: 200px;
+    .display_name {
+      font-size: 48px;
+      line-height: 48px;
+      color: #212121;
+      position: absolute;
+      top: 25px;
+    }
   }
 }
 </style>

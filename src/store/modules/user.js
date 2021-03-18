@@ -68,7 +68,6 @@ const actions = {
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
-        console.log(data)
         const data = response.data
         console.log(data)
 

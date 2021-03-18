@@ -56,9 +56,8 @@ export const constantRoutes = [
   },
 
   {
-    path: '/example',
+    path: '/essai-liste',
     component: Layout,
-    redirect: '/example/list',
     name: 'Example',
     meta: {
       title: 'Example',
@@ -68,34 +67,34 @@ export const constantRoutes = [
     children: [
       {
         path: 'create',
-        component: () => import('@/views/example/create'),
+        component: () => import('@/views/essai/create'),
         name: 'CreateArticle',
-        meta: { title: 'Creer un essai clinique(2)', icon: 'edit', breadcrumb: false },
+        meta: { title: 'Creer un essai clinique(2)', icon: 'edit', breadcrumb: false, activeMenu: '/essai/index' },
         hidden: true
       },
       {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/example/edit'),
+        path: 'edit/:id(\\w+)',
+        component: () => import('@/views/essai/edit'),
         name: 'EditArticle',
-        meta: { title: 'List des ', noCache: true, activeMenu: '/example/list' },
+        meta: { title: 'List des ', noCache: true, activeMenu: '/essai-liste/list' },
         hidden: true
       },
       {
         path: 'list',
-        component: () => import('@/views/example/list'),
+        component: () => import('@/views/essai/list'),
         name: 'Essais cliniques',
         meta: { title: 'Essais cliniques', icon: 'nested' }
       }
     ]
   },
   {
-    path: '/guide',
+    path: '/essai',
     component: Layout,
-    redirect: '/guide/index',
+    redirect: '/essai/index',
     children: [
       {
         path: 'index',
-        component: () => import('@/views/guide/index'),
+        component: () => import('@/views/essai/index'),
         name: 'Creer un essai clinique',
         meta: { title: 'Creer un essai clinique', icon: 'form', noCache: true }
       }
