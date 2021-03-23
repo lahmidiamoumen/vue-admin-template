@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -6,6 +6,7 @@ const state = {
   token: getToken(),
   nom: '',
   prenom: '',
+  username: '',
   email: '',
   fonction: '',
   auProfilDe: '',
@@ -24,6 +25,9 @@ const mutations = {
   },
   SET_PRENOM: (state, token) => {
     state.prenom = token
+  },
+  SET_USERNAME: (state, token) => {
+    state.username = token
   },
   SET_FONC: (state, token) => {
     state.fonction = token
@@ -69,7 +73,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const data = response.data
-        console.log(data)
+        console.log({getInfo:data})
 
         if (!data) {
           reject('Verification failed, please Login again.')
@@ -78,21 +82,22 @@ const actions = {
         const { nom, prenom, fonction, etablissement, adresse, telephone, email, auProfilDe, userName, grade } = data.user
 
         // roles must be a non-empty array
-        if (!grade || grade.length <= 0) {
+        if (!grade) {
           reject('getInfo: roles must be a non-null array!')
         }
         console.log(nom)
 
         commit('SET_NAME', nom)
         commit('SET_PRENOM', prenom)
+        commit('SET_USERNAME', userName)
         commit('SET_FONC', fonction)
         commit('SET_PROFIL', auProfilDe)
         commit('SET_ETABL', etablissement)
         commit('SET_TELE', telephone)
-        commit('SET_NAME', userName)
+        commit('SET_NAME', nom)
         commit('SET_EMAIL', email)
         commit('SET_ADDR', adresse)
-        commit('SET_ROLES', grade)
+        commit('SET_ROLES', [grade])
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -102,21 +107,21 @@ const actions = {
 
   // user logout
   logout({ commit, state, dispatch }) {
-    return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
+    return new Promise((resolve) => {
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])
+        commit('SET_USERNAME', '')
+        commit('SET_PRENOM', '')
+        commit('SET_FONC', '')
+        commit('SET_PROFIL', '')
+        commit('SET_ETABL', '')
+        commit('SET_TELE', '')
+        commit('SET_NAME', '')
+        commit('SET_EMAIL', '')
         removeToken()
         resetRouter()
-
-        // reset visited views and cached views
-        // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
         dispatch('tagsView/delAllViews', null, { root: true })
-
         resolve()
-      }).catch(error => {
-        reject(error)
-      })
     })
   },
 

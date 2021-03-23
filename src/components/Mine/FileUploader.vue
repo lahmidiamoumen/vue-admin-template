@@ -82,6 +82,10 @@ export default {
 }
 </script>
 <style>
+.el-upload__tip {
+  color: #a3a5a9;
+  margin-top: 2px;
+}
 .el-upload-dragger {
     margin-top: 12px;
     width: unset; 

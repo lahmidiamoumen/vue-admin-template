@@ -5,7 +5,7 @@
     <div :class="{hasTagsView:true}" class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
         <navbar />
-        <tags-view v-if="true" />
+        <tags-view/>
       </div>
       <app-main />
     </div>
@@ -50,6 +50,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  @import url('https://fonts.googleapis.com/css?family=Raleway');
   @import "~@/styles/mixin.scss";
   @import "~@/styles/variables.scss";
 

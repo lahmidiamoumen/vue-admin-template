@@ -15,6 +15,14 @@ export function getInfo() {
   })
 }
 
+export function fetchList(query) {
+  return request({
+    url: '/users/liste',
+    method: 'get',
+    params: query
+  })
+}
+
 export function logout() {
   return request({
     url: '/vue-element-admin/user/logout',

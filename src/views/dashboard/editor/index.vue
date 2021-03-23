@@ -6,7 +6,7 @@
         <span v-for="(item, key) in roles" :key="key" class="pan-info-roles">{{ item }}</span>
       </pan-thumb>
       <div class="info-container">
-        <span class="display_name">{{ name }}</span>
+        <span class="display_name">{{ username }}</span>
         <span style="font-size:20px;padding-top:20px;display:inline-block;">Editor's Dashboard</span>
       </div>
     </div>
@@ -30,7 +30,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'name',
+      'username',
       'email',
       'roles'
     ])

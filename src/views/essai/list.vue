@@ -13,9 +13,10 @@
           </router-link>
         </template>
       </el-table-column>
-      <el-table-column width="180px" align="center" label="Date">
+      <el-table-column width="200px" align="center" label="Date">
         <template slot-scope="scope">
-          <span>{{ timeSince(scope.row.createdAt) }}</span>
+          <i class="el-icon-time" />
+          <span>{{ timeSince(scope.row.createdAt)}}</span>
         </template>
       </el-table-column>
 
@@ -91,8 +92,9 @@ export default {
       })
     },
     timeSince(date) {
-      date = new Date(date)
-      var seconds = Math.floor((new Date() - date) / 1000)
+      date = new Date(date).toLocaleString()
+      return date
+/*       var seconds = Math.floor((new Date() - date) / 1000)
       var interval = seconds / 31536000
       if (interval > 1) {
         return Math.floor(interval) + ' years ago'
@@ -113,7 +115,7 @@ export default {
       if (interval > 1) {
         return Math.floor(interval) + ' minutes ago'
       }
-      return Math.floor(seconds) + ' seconds ago'
+      return Math.floor(seconds) + ' seconds ago' */
     }
   }
 }

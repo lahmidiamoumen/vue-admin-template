@@ -36,13 +36,11 @@ export const constantRoutes = [
     component: () => import('@/views/login/index'),
     hidden: true
   },
-
   {
     path: '/404',
     component: () => import('@/views/404'),
     hidden: true
   },
-
   {
     path: '/',
     component: Layout,
@@ -54,7 +52,9 @@ export const constantRoutes = [
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
   },
+]
 
+export const asyncRoutes = [
   {
     path: '/essai-liste',
     component: Layout,
@@ -62,21 +62,21 @@ export const constantRoutes = [
     meta: {
       title: 'Example',
       icon: 'el-icon-s-help',
-      roles: ['eval']
+      roles: ['promo']
     },
     children: [
       {
         path: 'create',
         component: () => import('@/views/essai/create'),
         name: 'CreateArticle',
-        meta: { title: 'Creer un essai clinique(2)', icon: 'edit', breadcrumb: false, activeMenu: '/essai/index' },
+        meta: { title: 'Creer un essai clinique(2)', icon: 'edit', breadcrumb: false, activeMenu: '/essai/index', roles: ['promo'] },
         hidden: true
       },
       {
         path: 'edit/:id(\\w+)',
         component: () => import('@/views/essai/edit'),
         name: 'EditArticle',
-        meta: { title: 'List des ', noCache: true, activeMenu: '/essai-liste/list' },
+        meta: { title: 'List des ', noCache: true, activeMenu: '/essai-liste/list', roles: ['promo'] },
         hidden: true
       },
       {
@@ -87,35 +87,42 @@ export const constantRoutes = [
       }
     ]
   },
-  {
+  { 
     path: '/essai',
     component: Layout,
     redirect: '/essai/index',
+    meta: {
+      title: 'Excel',
+      icon: 'excel',
+      roles: ['promo']
+    },
     children: [
       {
         path: 'index',
         component: () => import('@/views/essai/index'),
         name: 'Creer un essai clinique',
-        meta: { title: 'Creer un essai clinique', icon: 'form', noCache: true }
+        meta: { title: 'Creer un essai clinique', icon: 'form' }
       }
     ]
   },
-
   {
     path: '/form',
     component: Layout,
+    meta: {
+      roles: ['eval']
+    },
     children: [
       {
         path: 'index',
         name: 'Form',
         component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        meta: { title: 'Form', icon: 'form', }
       }
     ]
   },
-
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
+
 ]
 
 const createRouter = () => new Router({
