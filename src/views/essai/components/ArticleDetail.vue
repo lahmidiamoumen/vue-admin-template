@@ -464,7 +464,7 @@ export default {
           message: rule.field + ' est champ obligatoire',
           type: 'error'
         }) */
-        callback(new Error('champ obligatoire'))
+        callback(new Error('Ce champ est obligatoire'))
       } else {
         callback()
       }

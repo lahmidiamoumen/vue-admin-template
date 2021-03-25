@@ -8,6 +8,22 @@ export function login(data) {
   })
 }
 
+export function createEval(data) {
+  return request({
+    url: '/users/createEval',
+    method: 'post',
+    data
+  })
+}
+
+export function createUser(data) {
+  return request({
+    url: '/users/createUser',
+    method: 'post',
+    data
+  })
+}
+
 export function getInfo() {
   return request({
     url: '/users',

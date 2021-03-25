@@ -1,4 +1,5 @@
 <template>
+<div class="create-container">
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
@@ -41,19 +42,64 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
-
-      <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:5px;" @click.native.prevent="handleLogin">Login</el-button>
+    </el-form>
+      
+  </div>
+    <div class="login-form" style="padding: 0 35px">
+        <el-button class=""  type="text" @click="launchDialogue()">
+          Créer un compte
+        </el-button>
       </div>
 
-    </el-form>
+    <el-dialog title="Créer un compte promoteur" :visible.sync="showDialog" width="650px">
+      <el-form ref="dataForm" :rules="dom" :model="temp" label-position="right" label-width="200px" style="width: 400px margin: 50px auto">
+        <el-form-item label="Nom" prop="nom">
+          <el-input v-model="temp.nom" style="width:300px" clearable />
+        </el-form-item>
+        <el-form-item label="Prenom" prop="prenom">
+          <el-input v-model="temp.prenom" style="width:300px" clearable />
+        </el-form-item>
+        <el-form-item label="Nom d'utilisateur" prop="userName">
+          <el-input v-model="temp.userName" style="width:300px" />
+        </el-form-item>
+        <el-form-item label="Email" prop="email">
+          <el-input v-model="temp.email" style="width:300px" />
+        </el-form-item>
+        <el-form-item label="Mot de passe" prop="passWord">
+          <el-input v-model="temp.passWord" style="width:300px" />
+        </el-form-item>
+        <el-form-item label="Etablissement">
+          <el-input v-model="temp.etablissement" style="width:300px" clearable />
+        </el-form-item>
+        <el-form-item label="Au profil de">
+          <el-input v-model="temp.auProfilDe" style="width:300px" clearable />
+        </el-form-item>
+        <el-form-item label="Fonction">
+          <el-input v-model="temp.fonction" style="width:300px" clearable />
+        </el-form-item>
+        <el-form-item label="Telephone" prop="telephone">
+          <el-input v-model="temp.telephone" style="width:300px" clearable />
+        </el-form-item>
+        <el-form-item label="Address">
+          <el-input v-model="temp.address" type="textarea" style="width:300px" clearable />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="showDialog = false">
+          Cancel
+        </el-button>
+        <el-button type="primary" @click="createData()">
+          Confirm
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-// import { validUsername } from '@/utils/validate'
+import { validEmail } from '@/utils/validate'
+import { createUser } from '@/api/user'
 
 export default {
   name: 'Login',
@@ -65,14 +111,69 @@ export default {
         callback()
       }
     }
+    const validateEmail = (rule, value, callback) => {
+      if (value) {
+        if (validEmail(value)) {
+          callback()
+        } else {
+          callback(new Error('Email est incorrect'))
+        }
+      } else {
+        callback()
+      }
+    }
+    const validatePhone = (rule, value, callback) => {
+      if (value) {
+        if (/[0][1-9]\d{8}/.test(value)) {
+          callback()
+        } else {
+          callback(new Error('Numéro de téléphone incorrect.'))
+        }
+      } else {
+        callback()
+      }
+    }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+      if (value.length < 8) {
+        callback(new Error('le mot de passe doit être de 8 caractères au minimum'))
       } else {
         callback()
       }
     }
     return {
+      temp: {
+        email: '',
+        userName: '',
+        passWord: '',
+        nom: '',
+        prenom: '',
+        fonction: '',
+        etablissement: '',
+        adresse: '',
+        telephone: '',
+        auProfilDe: '',
+      },
+      showDialog: false,
+      dom: {
+        nom: [
+          { required: true, message: 'Le Nom est obligatoire', trigger: 'blur' },
+          { min: 3, max: 30, message: 'Le Nom doit être de 3 caractères minimum', trigger: 'blur' }
+        ],
+        prenom: [
+          { required: true, message: 'Prenom est obligatoire', trigger: 'blur' },
+          { min: 3, max: 30, message: 'Prenom doit être de 3 caractères minimum', trigger: 'blur' }
+        ],
+        userName: [
+          { required: true, message: 'Nom d\'utilisateur est obligatoire', trigger: 'blur' },
+          { min: 6, max: 40, message: 'doit être de 6 caractères au minimum', trigger: 'blur' }
+        ],
+        passWord: [
+           { required: true, message: 'ce champ est obligatoire', trigger: 'blur' },
+          { min: 8, max: 40, message: 'le mot de passe doit être de 8 caractères minimum', trigger: 'blur' }
+        ],
+        email: [ { required: true, message: 'Email est obligatoire', trigger: 'blur' }, { validator: validateEmail }],
+        telephone: [ { validator: validatePhone }]
+      },
       loginForm: {
         username: 'lahmidimoumen1',
         password: 'moka2011'
@@ -95,6 +196,30 @@ export default {
     }
   },
   methods: {
+    launchDialogue() {
+      this.showDialog = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].resetFields();
+      })
+    },
+    createData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          this.showDialog = false
+          createUser(this.temp).then(() => {
+            const createdAt = Date.now() 
+            this.list.unshift({...this.temp,createdAt })
+            this.showDialog = false
+            this.$notify({
+              title: 'Success',
+              message: 'Évaluateur avec succès',
+              type: 'success',
+              duration: 2000
+            })
+          }) 
+        }
+      })
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -127,9 +252,6 @@ export default {
 </script>
 
 <style lang="scss">
-/* 修复input 背景不协调 和光标变色 */
-/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
-
 $bg:#283443;
 $light_gray:#fff;
 $cursor: #fff;
@@ -178,7 +300,7 @@ $bg:#2d3a4b;
 $dark_gray:#889aa4;
 $light_gray:#eee;
 
-.login-container {
+.login-container, .create-container {
   min-height: 100%;
   width: 100%;
   background-color: $bg;

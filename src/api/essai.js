@@ -8,11 +8,27 @@ export function fetchList(query) {
   })
 }
 
+export function fetchListAll(query) {
+  return request({
+    url: '/essais/getEssaisAll',
+    method: 'get',
+    params: query
+  })
+}
+
 export function fetchArticle(id) {
   return request({
     url: '/essais/getEssaiFullData',
     method: 'get',
     params: { id }
+  })
+}
+
+export function addRemark(id, data) {
+  return request({
+    url: `/essais/addRemark/${id}`,
+    method: 'patch',
+    data
   })
 }
 

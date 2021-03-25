@@ -51,7 +51,7 @@ export const constantRoutes = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
-  },
+  }
 ]
 
 export const asyncRoutes = [
@@ -61,8 +61,7 @@ export const asyncRoutes = [
     name: 'Example',
     meta: {
       title: 'Example',
-      icon: 'el-icon-s-help',
-      roles: ['promo']
+      icon: 'el-icon-s-help'
     },
     children: [
       {
@@ -76,7 +75,7 @@ export const asyncRoutes = [
         path: 'edit/:id(\\w+)',
         component: () => import('@/views/essai/edit'),
         name: 'EditArticle',
-        meta: { title: 'List des ', noCache: true, activeMenu: '/essai-liste/list', roles: ['promo'] },
+        meta: { title: 'List des ', noCache: true, activeMenu: '/essai-liste/list' },
         hidden: true
       },
       {
@@ -87,7 +86,7 @@ export const asyncRoutes = [
       }
     ]
   },
-  { 
+  {
     path: '/essai',
     component: Layout,
     redirect: '/essai/index',
@@ -116,7 +115,22 @@ export const asyncRoutes = [
         path: 'index',
         name: 'Form',
         component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form', }
+        meta: { title: 'Promoteurs', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/evaluateur',
+    component: Layout,
+    meta: {
+      roles: ['valid']
+    },
+    children: [
+      {
+        path: 'index',
+        name: 'Evalueteur',
+        component: () => import('@/views/evaluateur/index'),
+        meta: { title: 'Evalueteur', icon: 'form' }
       }
     ]
   },

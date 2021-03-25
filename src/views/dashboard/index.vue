@@ -14,7 +14,7 @@ export default {
   components: { adminDashboard, editorDashboard },
   data() {
     return {
-      currentRole: 'adminDashboard'
+      currentRole: 'editorDashboard'
     }
   },
   computed: {
@@ -23,8 +23,8 @@ export default {
     ])
   },
   created() {
-    if (!this.roles.includes('eval')) {
-      this.currentRole = 'editorDashboard'
+    if (!this.roles.includes('promo')) {
+      this.currentRole = 'adminDashboard'
     }
   }
 }

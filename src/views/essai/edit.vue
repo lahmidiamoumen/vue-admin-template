@@ -1,64 +1,31 @@
 <template>
   <div class="dashboard-editor-container">
+    <el-card shadow="never" :body-style="{ padding: '20px',borderRadius: '4px' }">
+      <dl>
+        <dt><strong>Date de creation</strong></dt>
+        <dd>{{ date(postForm.createdAt)}}</dd>
+      </dl>
+      <dl>
+        <dt><strong>Cree par</strong></dt>
+        <dd>{{ postForm.createdBy.nom}} {{ postForm.createdBy.prenom}}</dd>
+      </dl>
+       <dl>
+        <dt><strong>Objectif</strong></dt>
+        <dd>{{ postForm.objectif}}</dd>
+      </dl>
+       <dl>
+        <dt><strong>Titre</strong></dt>
+        <dd>{{ postForm.titre}}</dd>
+      </dl>
+      <!-- card body -->
+    </el-card>
+    
     <el-collapse :accordion="false" >
       <el-collapse-item>
         <template slot="title">
           <span style="font-size: 20px; padding: 0 17px">Annex B</span>
         </template>
-      <!-- <div class="form-container">
-                    
-          <table>
-            <tr>
-              <td class="el-form-item__label"><h4>Titre de l'essai</h4></td>
-              <td style="font-size: 15px">{{postForm.titre}}</td>
-            </tr>
-            <tr>
-              <td> <h6>Objectif</h6></td>
-              <td>{{ postForm.objectif }}</td>
-            </tr>  
-            <tr>
-              <td>Recherche avec bénéfice individuel direct :</td>
-              <td>{{ postForm.rechercheBeneficeIndividuel }}</td>
-            </tr>
-            <tr>
-              <td>Phase d'expérimentation clinique :</td>
-              <td>{{ postForm.phaseExperimentationClinique }}</td>
-            </tr>
-            <tr>
-              <td>Essai</td>
-              <td>{{ postForm.essai }}</td>
-            </tr>
-            <tr>
-              <td>Etude de bioéquivalence</td>
-              <td>{{ postForm.etudeBioequivalenc }}</td>
-            </tr>
-            <tr>
-              <td>Date prévue pour le début de la recherche</td>
-              <td>{{ postForm.dureePrevuDebut }}</td>
-            </tr>
-            <tr>
-              <td>Durée prévue</td>
-            </tr>
-            <tr>
-              <td>Dénomination spéciale</td>
-              <td>{{ postForm.medicamentEtudie.denominationSpeciale }}</td>
-            </tr>
-            <tr>
-              <td>Nom de code</td>
-              <td>{{ postForm.medicamentEtudie.nomDeCode }}</td>
-            </tr>
-            <tr>
-              <td>Dénomination scientifique et D.C.I du (des) principe(s) actif(s)</td>
-              <td>{{ postForm.medicamentEtudie.DCI }}</td>
-            </tr>
-            <tr>
-              <td>Composition qualitative et quantitative</td>
-              <td>{{ postForm.medicamentEtudie.compositionQualitativeQuantitative }}</td>
-            </tr>
-          </table>
-
-        </div> -->
-        <el-form ref="postForm" :model="postForm"  class="form-container">
+         <el-form ref="postForm" :model="postForm"  class="form-container">
           <div style="padding: 12px">
             <br>
             <el-card shadow="hover" class="app-container" :body-style="{ padding: '20px 60px',marging: '20px' }">
@@ -295,8 +262,8 @@
           <span class="headon"> Mes fichiers</span>
         </template>
         <div style="padding: 40px">
-          <FileUploaderEdit :remrque="postForm.declarationAssurance.remarque" :has-remark="postForm.declarationAssurance.hasRemark" :value="postForm.lettreMandat.value" commit="lettreMandat" context-description="Lettre mandat du sponsor à la CRO" />
-          <FileUploaderEdit :remrque="postForm.lettreMandat.remarque" :has-remark="postForm.lettreMandat.hasRemark" :value="postForm.declarationAssurance.value" commit="declarationAssurance" context-description="Attestation d'assurance" />
+          <FileUploaderEdit :remrque="postForm.declarationAssurance.remarque" :has-remark="postForm.declarationAssurance.hasRemark" :value="postForm.declarationAssurance.value" commit="declarationAssurance" context-description="Lettre mandat du sponsor à la CRO" />
+          <FileUploaderEdit :remrque="postForm.lettreMandat.remarque" :has-remark="postForm.lettreMandat.hasRemark" :value="postForm.lettreMandat.value" commit="lettreMandat" context-description="Attestation d'assurance" />
           <FileUploaderEdit :remrque="postForm.avisFavorableComiteEthique.remarque" :has-remark="postForm.avisFavorableComiteEthique.hasRemark" :value="postForm.avisFavorableComiteEthique.value" commit="avisFavorableComiteEthique" context-description="Avis favorable du comité d'éthique" />
           <FileUploaderEdit :remrque="postForm.synopsisProtocole.remarque" :has-remark="postForm.synopsisProtocole.hasRemark" :value="postForm.synopsisProtocole.value" commit="synopsisProtocole" context-description="Synopsis du protocole en français" />
           <FileUploaderEdit :remrque="postForm.protocoleFinal.remarque" :has-remark="postForm.protocoleFinal.hasRemark" :value="postForm.protocoleFinal.value" commit="protocoleFinal" context-description="Protocole final et tous les amendements" />
@@ -364,6 +331,8 @@ const defaultForm = {
     criteres: '',
     duree: 0
   },
+  createdAt: '',
+  createdBy: '',
   commite: {
     info: '',
     date: ''
@@ -395,10 +364,12 @@ export default {
   },
   created() {
       const id = this.$route.params && this.$route.params.id
-      console.log(id)
       this.fetchEssai(id)
   },
   methods: {
+    date(date) {
+      return new Date(date).toUTCString()
+    },
     fetchEssai(id) {
       fetchArticle(id).then(response => {
           this.postForm = Object.assign({}, response.data.essai)
