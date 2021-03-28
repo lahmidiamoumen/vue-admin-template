@@ -26,64 +26,46 @@
           <span style="font-size: 20px; padding: 0 17px">Annex B</span>
         </template>
          <el-form ref="postForm" :model="postForm"  class="form-container">
-          <div style="padding: 12px">
-            <br>
-            <el-card shadow="hover" class="app-container" :body-style="{ padding: '20px 60px',marging: '20px' }">
-              <el-col :span="24">
+          <div style="padding: 20px 70px">
+            <el-card shadow="never" :body-style="{ padding: '20px' }">
+                  <div slot="header">
+                    <span>Essai</span>
+                  </div>
                 <el-form-item style="margin-bottom: 40px;" prop="titre">
-                  <MDinput :value="postForm.titre" disabled :maxlength="100" required>
+                  <MDinput :value="postForm.titre" disabled :maxlength="100" style="width: 90%;" required>
                     Titre de l'essai
                   </MDinput>
                 </el-form-item>
 
-                <el-form-item label="Objectif" required prop="objectif">
-                  <el-input :value="postForm.objectif" disabled type="textarea" />
+                <el-form-item label="Objectif"  prop="objectif" label-width="360px">
+                  <el-input :value="postForm.objectif" disabled type="textarea" style="width: 90%;color: #333" />
                 </el-form-item>
 
-                <el-form-item label="Recherche avec bénéfice individuel direct :" required prop="rechercheBeneficeIndividuel" size="small">
+                <el-form-item label="Recherche avec bénéfice individuel direct :" required prop="rechercheBeneficeIndividuel" label-width="360px" size="small">
                   <el-radio-group  :value="postForm.rechercheBeneficeIndividuel">
                     <el-radio :label="postForm.rechercheBeneficeIndividuel" border size="mini">{{ postForm.rechercheBeneficeIndividuel ? 'Oui' : 'Non'}}</el-radio>
                   </el-radio-group>
                 </el-form-item>
 
-                <el-form-item label="Phase d'expérimentation clinique :" required prop="phaseExperimentationClinique" size="small">
+                <el-form-item label="Phase d'expérimentation clinique :" label-width="360px" required prop="phaseExperimentationClinique" size="small">
                   <el-radio-group  :value="postForm.phaseExperimentationClinique">
                     <el-radio :label="postForm.phaseExperimentationClinique" border size="mini" />
                   </el-radio-group>
                 </el-form-item>
 
-                <el-card shadow="never" :body-style="{ padding: '20px' }">
-                  <div slot="header">
-                    <span>Essai</span>
-                  </div>
-                  <el-col :span="16" :offset="2">
-                    <template>
-                      <el-form-item label="Essai:" required prop="essai" size="small">
-                        <el-select :value="postForm.essai" disabled placeholder="Select" style="width: 90%;">
-                        </el-select>
-                      </el-form-item>
-                    </template>
-                  </el-col>
-                  <el-col :span="16" :offset="2">
-                    <el-form-item label="autre, à préciser :">
-                      <el-input :value="postForm.essai" disabled :rows="1" style="width: 90%;" type="textarea" class="article-textarea" autosize placeholder="Aa..." />
-                    </el-form-item>
-                  </el-col>
-                </el-card>
-                <br>
-                <el-row :gutter="20">
-                  <el-col :span="12">
-                    <el-form-item label="Etude de bioéquivalence" required>
-                      <el-input :value="postForm.etudeBioequivalence" disabled />
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-
-                <div class="postInfo-container">
+                  <el-form-item label="Essai:" required prop="essai" label-width="360px" size="small">
+                    <el-input :value="postForm.essai" disabled placeholder="Select" style="width: 90%;"/>
+                  </el-form-item>
+                
+                  <br>
+                  <el-form-item label="Etude de bioéquivalence" label-width="360px" required>
+                    <el-input :value="postForm.etudeBioequivalence" disabled style="width: 90%;"/>
+                  </el-form-item>
+                  <br>                 
                   <el-row>
-                    <el-col :span="8" :offset="0">
-                      <el-form-item label="Date prévue pour le début de la recherche">
-                        <el-date-picker :value="displayTime" type="date" format="yyyy-MM-dd" style="width: 90%;" placeholder="Select date and time" />
+                    <el-col :span="8" :offset="4">
+                      <el-form-item label="Date prévue pour le début de la recherche" >
+                        <el-date-picker :value="displayTime" disabled type="date" format="yyyy-MM-dd" style="width: 90%;" placeholder="Select date and time" />
                       </el-form-item>
                     </el-col>
                     <el-col :span="4">
@@ -92,10 +74,7 @@
                       </el-form-item>
                     </el-col>
                   </el-row>
-                </div>
 
-              </el-col>
-            </el-card>
             <br>
             <el-table :data="postForm.medicamentEtudie" align="center" style="width: 100%">
             <el-table-column label="Dénomination spéciale" width="200px" align="center">
@@ -143,20 +122,15 @@
                   <span>{{ row.Etranger }}</span>
               </template>
             </el-table-column>
-          </el-table>  
-            <br>
-            <el-card shadow="hover" class="app-container" :body-style="{ padding: '20px'}">
-              <div slot="header">
-                <span class="el-upload__tip">MEDICAMENT OU PRODUIT DE REFERENCE</span>
-              </div>
+            </el-table>  
 
-              <el-row :gutter="0">
-                <el-col :span="10" :offset="0">
-                  <el-form-item label="Dénomination spéciale" label-width="360px">
-                    <el-input :value="postForm.medicamentReference.denominationSpeciale" disabled />
-                  </el-form-item>
-                </el-col>
-              </el-row>
+            <br>
+            <el-divider content-position="left">MEDICAMENT OU PRODUIT DE REFERENCE</el-divider>
+            <br>
+              <el-form-item label="Dénomination spéciale" label-width="360px">
+                <el-input :value="postForm.medicamentReference.denominationSpeciale" disabled />
+              </el-form-item>
+
               <el-form-item label="Dénomination scientifique et DCI du (des) principe(s) actif(s)" label-width="360px">
                 <el-input :value="postForm.medicamentReference.DCI" style="width:60%" disabled />
               </el-form-item>
@@ -177,10 +151,10 @@
                 <el-input disabled :value="postForm.medicamentReference.fabricant" placeholder="nom(s) ou dénomination(s) et lieu(x) de fabrication" style="width:60%" />
               </el-form-item>
 
-            </el-card>
             <br>
-            <el-card shadow="hover" class="app-container" :body-style="{ padding: '0px', paddingRight: '60px'}">
-              <p class="headon">INVESTIGATEUR(S)</p><br>
+            <el-divider content-position="left">INVESTIGATEUR(S)</el-divider>
+            <br>
+
               <el-table :data="postForm.investigateur" align="center" style="width: 100%">
                 <el-table-column label="Nom(s) et Prénom(s)" width="220px" align="center">
                   <template slot-scope="{row}">
@@ -198,13 +172,8 @@
                   </template>
                 </el-table-column>
               </el-table>  
-            </el-card>
             <br>
-            <el-card shadow="hover" class="app-container" :body-style="{ padding: '20px'}">
-              <div slot="header">
-                <span class="el-upload__tip">PLACEBO</span>
-              </div>
-
+            <el-divider content-position="left">PLACEBO</el-divider>
               <el-form-item label="Forme pharmaceutique" label-width="360px">
                 <el-input disabled :value="postForm.placebo.formePharmaceutique" placeholder="pharmacopée" style="width:60%" />
               </el-form-item>
@@ -213,12 +182,9 @@
                 <el-input disabled :value="postForm.placebo.fabricant" placeholder="nom(s) ou dénomination(s) et lieu(x) de fabrication" style="width:60%" />
               </el-form-item>
 
-            </el-card>
             <br>
-            <el-card shadow="hover" class="app-container" :body-style="{ padding: '20px'}">
-              <div slot="header">
-                <span class="el-upload__tip">PERSONNES SE PRETANT A LA RECHERCHE</span>
-              </div>
+            <el-divider content-position="left">PERSONNES SE PRETANT A LA RECHERCHE</el-divider>
+            <br>
 
               <el-form-item label="Nombre prévu de personnes" label-width="360px">
                 <el-input-number :value="postForm.personne.prevu" disabled :min="0" size="medium" placeholder="Aa..." style="width:60%" />
@@ -235,49 +201,58 @@
               <el-form-item label="Durée du traitement ou de la participation par personne" label-width="360px">
                 <el-input-number :value="postForm.personne.duree" :min="0" disabled size="medium" placeholder="Aa..." style="width:60%" />
               </el-form-item>
-            </el-card>
-
             <br>
-            <el-card shadow="hover" class="app-container" :body-style="{ padding: '20px'}">
-              <div slot="header">
-                <span class="el-upload__tip">COMITE D'ETHIQUE</span>
-              </div>
-
+            <el-divider content-position="left">COMITE D'ETHIQUE</el-divider>
+            <br>
               <el-form-item label="Comité (nom et adresse)" label-width="360px">
                 <el-input disabled :value="postForm.commite.info" placeholder="Aa..." style="width:60%" />
               </el-form-item>
               <el-form-item label="Date de l'avis" label-width="360px">
                 <el-date-picker :value="displayComiteDate" disabled type="date" format="yyyy-MM-dd" style="width:60%" placeholder="Select date and time" />
               </el-form-item>
-            </el-card>
             <br> 
+          </el-card>
+
           </div>
         </el-form>
       </el-collapse-item>
     </el-collapse>
     <br>
-    <el-collapse v-model="activeName" accordion >
-      <el-collapse-item title="Fichies" name="name2"> 
+    <el-collapse  accordion >
+      <el-collapse-item title="Fichies" > 
         <template slot="title">
           <span class="headon"> Mes fichiers</span>
         </template>
-        <div style="padding: 40px">
-          <FileUploaderEdit :remrque="postForm.declarationAssurance.remarque" :has-remark="postForm.declarationAssurance.hasRemark" :value="postForm.declarationAssurance.value" commit="declarationAssurance" context-description="Lettre mandat du sponsor à la CRO" />
-          <FileUploaderEdit :remrque="postForm.lettreMandat.remarque" :has-remark="postForm.lettreMandat.hasRemark" :value="postForm.lettreMandat.value" commit="lettreMandat" context-description="Attestation d'assurance" />
-          <FileUploaderEdit :remrque="postForm.avisFavorableComiteEthique.remarque" :has-remark="postForm.avisFavorableComiteEthique.hasRemark" :value="postForm.avisFavorableComiteEthique.value" commit="avisFavorableComiteEthique" context-description="Avis favorable du comité d'éthique" />
-          <FileUploaderEdit :remrque="postForm.synopsisProtocole.remarque" :has-remark="postForm.synopsisProtocole.hasRemark" :value="postForm.synopsisProtocole.value" commit="synopsisProtocole" context-description="Synopsis du protocole en français" />
-          <FileUploaderEdit :remrque="postForm.protocoleFinal.remarque" :has-remark="postForm.protocoleFinal.hasRemark" :value="postForm.protocoleFinal.value" commit="protocoleFinal" context-description="Protocole final et tous les amendements" />
-          <FileUploaderEdit :remrque="postForm.crf.remarque" :has-remark="postForm.crf.hasRemark" :value="postForm.rcp.value" commit="rcp" context-description="Brochure investigateur ou RCP du produit le cas échéant" />
-          <FileUploaderEdit :remrque="postForm.rcp.remarque" :has-remark="postForm.rcp.hasRemark" :value="postForm.crf.value" commit="crf" context-description="CRF et tout autre documentation qui sera fournie au patient" />
-          <FileUploaderEdit :remrque="postForm.ficheInformationPatient.remarque" :has-remark="postForm.ficheInformationPatient.hasRemark" :value="postForm.approbations.value" commit="approbations" context-description="Approbations des autorités compétentes dans d'autres pays, le cas échéant" />
-          <FileUploaderEdit :remrque="postForm.modeleFinancier.remarque" :has-remark="postForm.modeleFinancier.hasRemark" :value="postForm.ficheInformationPatient.value" commit="ficheInformationPatient" context-description="Fiche d'information du patient et formulaire de consentement éclairé" />
-          <FileUploaderEdit :remrque="postForm.autorisation.remarque" :has-remark="postForm.autorisation.hasRemark" :value="postForm.modeleFinancier.value" commit="modeleFinancier" context-description="Modèle de contrat financier des médecins participants" />
-          <FileUploaderEdit :remrque="postForm.paiement.remarque" :has-remark="postForm.paiement.hasRemark" :value="postForm.autorisation.value" commit="autorisation" context-description="Autorisation de mise sur le marché algérienne ou celle du pays d'origine" />
-          <FileUploaderEdit :remrque="postForm.approbations.remarque" :has-remark="postForm.approbations.hasRemark" :value="postForm.paiement.value" commit="paiement" context-description=" Quittance de paiement / preuve de paiement des frais d'essais cliniques." />
+        <div v-if="(postForm.evaluatedBy && postForm.evaluatedBy === id) || (postForm.createdBy._id === id) ||  roles.includes('valid')" style="padding: 40px">
+          <FileUploaderEdit :doc.sync="postForm.declarationAssurance" commit="declarationAssurance" context-description="Lettre mandat du sponsor à la CRO" />
+          <FileUploaderEdit :doc.sync="postForm.lettreMandat" commit="lettreMandat" context-description="Attestation d'assurance" />
+          <FileUploaderEdit :doc.sync="postForm.avisFavorableComiteEthique" commit="avisFavorableComiteEthique" context-description="Avis favorable du comité d'éthique" />
+          <FileUploaderEdit :doc.sync="postForm.synopsisProtocole" commit="synopsisProtocole" context-description="Synopsis du protocole en français" />
+          <FileUploaderEdit :doc.sync="postForm.protocoleFinal" commit="protocoleFinal" context-description="Protocole final et tous les amendements" />
+          <FileUploaderEdit :doc.sync="postForm.crf" commit="rcp" context-description="Brochure investigateur ou RCP du produit le cas échéant" />
+          <FileUploaderEdit :doc.sync="postForm.rcp" commit="crf" context-description="CRF et tout autre documentation qui sera fournie au patient" />
+          <FileUploaderEdit :doc.sync="postForm.ficheInformationPatient" commit="approbations" context-description="Approbations des autorités compétentes dans d'autres pays, le cas échéant" />
+          <FileUploaderEdit :doc.sync="postForm.modeleFinancier" commit="ficheInformationPatient" context-description="Fiche d'information du patient et formulaire de consentement éclairé" />
+          <FileUploaderEdit :doc.sync="postForm.autorisation" commit="modeleFinancier" context-description="Modèle de contrat financier des médecins participants" />
+          <FileUploaderEdit :doc.sync="postForm.paiement" commit="autorisation" context-description="Autorisation de mise sur le marché algérienne ou celle du pays d'origine" />
+          <FileUploaderEdit :doc.sync="postForm.approbations" commit="paiement" context-description=" Quittance de paiement / preuve de paiement des frais d'essais cliniques." />
+        </div>
+        <div v-else style="text-align: center">
+          Vous n'avez pas le droit de consulter les documents de cet esaai
         </div>
         
       </el-collapse-item>
     </el-collapse>
+
+    <br>
+    <el-card v-if="(postForm.evaluatedBy && postForm.evaluatedBy === id) ||  roles.includes('valid')" shadow="hover" :body-style="{ padding: '20px' }">
+      <div style="float: right; padding: 20px">
+        <el-button type="success" style=" width: 200px" size="big" @click="aproved()">
+          Approuvé
+        </el-button>
+      </div>
+    </el-card>
+    
     
     <el-tooltip placement="top" content="Retour vers le haut de la page">
       <back-to-top :visibility-height="300" :back-position="50" transition-name="fade" />
@@ -290,6 +265,7 @@ import BackToTop from '@/components/BackToTop'
 import FileUploaderEdit from '@/components/Mine/FileUploaderEdit'
 import MDinput from '@/components/MDinput'
 import { fetchArticle } from '@/api/essai'
+import { mapGetters } from 'vuex'
 
 const defaultForm = {
   titre: '',
@@ -333,6 +309,7 @@ const defaultForm = {
   },
   createdAt: '',
   createdBy: '',
+  evaluatedBy: undefined,
   commite: {
     info: '',
     date: ''
@@ -345,20 +322,7 @@ export default {
   name: 'ArticleDetail',
   components: { MDinput, BackToTop, FileUploaderEdit },
   data() {
-    
-    const validateRequire = (rule, value, callback) => {
-      if (value === '') {
-        this.$message({
-          message: rule.field + ' est champ obligatoire',
-          type: 'error'
-        })
-        callback(new Error(rule.field + ' est champ obligatoire'))
-      } else {
-        callback()
-      }
-    }
     return {
-      activeName: ['name2'],
       postForm: Object.assign({}, defaultForm)
     }
   },
@@ -375,45 +339,32 @@ export default {
           this.postForm = Object.assign({}, response.data.essai)
       })
     },
-    submitForm() { 
-      const data = { ...this.postForm, ...this.$store.state.files }
-      console.log(data)
-      this.$refs.postForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('essais/createEssai', data).then(() => {
+    aproved(){
+      if(this.postForm.declarationAssurance.status === 'satisfait' &&
+          this.postForm.lettreMandat.status === 'satisfait' &&
+          this.postForm.avisFavorableComiteEthique.status === 'satisfait' &&
+          this.postForm.synopsisProtocole.status === 'satisfait' &&
+          this.postForm.protocoleFinal.status === 'satisfait' &&
+          this.postForm.crf.status === 'satisfait' &&
+          this.postForm.rcp.status === 'satisfait' &&
+          this.postForm.ficheInformationPatient.status === 'satisfait' &&
+          this.postForm.modeleFinancier.status === 'satisfait' &&
+          this.postForm.autorisation.status === 'satisfait' &&
+          this.postForm.paiement.status === 'satisfait' &&
+          this.postForm.approbations.status === 'satisfait') {
+
+          } else {
             this.$notify({
-              title: 'published',
-              message: 'success',
-              type: 'success',
-              duration: 2000
-            })
-            this.loading = false
-          }).catch((err) => {
-            console.log(err)
-            this.$notify({
-              title: 'Error',
-              message: err,
+              title: 'Erreur',
+              message: "Approuvés tous les fichiers d'abord",
               type: 'error',
               duration: 2000
             })
-            this.loading = false
-            console.log(err)
-          })
-          this.postForm.status = 'published'
-          this.loading = false
-        } else {
-          this.$message({
-            message: '请填写必要的标题和内容',
-            type: 'warning'
-          })
-          console.log('error submit!!')
-          return false
-        }
-      })
+          }
     }
   },
   computed: {
+    ...mapGetters(['id', 'roles']),
     displayTime: {
       get() {
         return (+new Date(this.postForm.datePrevuDebut))
@@ -458,11 +409,26 @@ export default {
   /* font-family: 'Raleway'; */
 }
 
+.el-input.is-disabled .el-input__inner{
+  background-color: #F5F7FA;
+  border-color: #E4E7ED;
+  color: #333 !important;
+  cursor: initial;
+}
+
+
 .dashboard-editor-container {
   background-color: #fcfcfc;
   min-height: 100vh;
   padding: 50px 60px 0px;
   padding-bottom: 80px;
+  
+    .el-textarea.is-disabled .el-textarea__inner{
+      color: #333
+    }
+    .el-input.is-disabled .el-input__inner {
+      color: #333;
+    }
   .pan-info-roles {
     font-size: 12px;
     font-weight: 700;
@@ -482,5 +448,24 @@ export default {
       top: 25px;
     }
   }
+}
+dl {
+  display: flex;
+  flex-flow: row wrap;
+}
+dt {
+  flex-basis: 20%;
+  padding: 8px;
+  font-size: 14px;
+  color: #333;
+  background: #f9f9f9;
+  text-align: right;
+}
+dd {
+  flex-basis: 70%;
+  flex-grow: 1;
+  margin: 0;
+  padding: 8px;
+  border-bottom: 0.1px solid #f1f1f1;
 }
 </style>

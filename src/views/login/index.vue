@@ -52,6 +52,34 @@
         </el-button>
       </div>
 
+      <el-dialog
+        title="Activation email"
+        :visible.sync="dialogVisible"
+        width="40%">
+        <el-form ref="dataEmail" :rules="dom" :model="email" label-position="right" style="width: 400px margin: 50px auto">
+          <el-form-item label="Code de verifcation email" prop="code">
+            <el-input v-model="email.code" style="width:300px" clearable />
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">
+            Annuler
+          </el-button>
+          <el-button type="primary" @click="verifyEmail()">
+            Confirmer
+          </el-button>
+        </div>  
+      </el-dialog>
+
+      <el-dialog
+        center
+        title="Activation email"
+        :visible.sync="dialogCompte"
+        width="40%">
+        <p>Votre compte est actuellement désactivé.veuillez contacter votre administrateur</p>
+        
+      </el-dialog>
+
     <el-dialog title="Créer un compte promoteur" :visible.sync="showDialog" width="650px">
       <el-form ref="dataForm" :rules="dom" :model="temp" label-position="right" label-width="200px" style="width: 400px margin: 50px auto">
         <el-form-item label="Nom" prop="nom">
@@ -99,7 +127,8 @@
 
 <script>
 import { validEmail } from '@/utils/validate'
-import { createUser } from '@/api/user'
+import { createUser, activateEmail } from '@/api/user'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Login',
@@ -141,6 +170,12 @@ export default {
       }
     }
     return {
+      dialogVisible: false,
+      showDialog: false,
+      dialogCompte: false,
+      email: {
+        code: ''
+      },
       temp: {
         email: '',
         userName: '',
@@ -153,7 +188,6 @@ export default {
         telephone: '',
         auProfilDe: '',
       },
-      showDialog: false,
       dom: {
         nom: [
           { required: true, message: 'Le Nom est obligatoire', trigger: 'blur' },
@@ -169,8 +203,12 @@ export default {
         ],
         passWord: [
            { required: true, message: 'ce champ est obligatoire', trigger: 'blur' },
-          { min: 8, max: 40, message: 'le mot de passe doit être de 8 caractères minimum', trigger: 'blur' }
+            { min: 8, max: 40, message: 'le mot de passe doit être de 8 caractères minimum', trigger: 'blur' }
         ],
+        code: [
+           { required: true, message: 'ce champ est obligatoire', trigger: 'blur' },
+            { min: 6, max: 6, message: '4 DIGIT', trigger: 'blur' }
+        ] ,
         email: [ { required: true, message: 'Email est obligatoire', trigger: 'blur' }, { validator: validateEmail }],
         telephone: [ { validator: validatePhone }]
       },
@@ -200,6 +238,32 @@ export default {
       this.showDialog = true
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields();
+      })
+    },
+    verifyEmail() {
+      this.$refs['dataEmail'].validate((valid) => {
+        if (valid) {
+          this.dialogVisible = false
+          activateEmail(this.email,this.id).then((response) => {
+            if (response.data.active) {
+              this.loading = true
+              this.$store.dispatch('user/login', this.loginForm).then(() => {
+              this.$router.push({ path: this.redirect || '/' })
+              this.loading = false
+            }).catch((err) => {
+              this.$notify({
+                message: err,
+                type: 'error',
+                duration: 2000
+              })
+              this.loading = false
+            })
+              }
+            else {
+              this.dialogVisible = true
+            }
+          })
+        }
       })
     },
     createData() {
@@ -238,8 +302,12 @@ export default {
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
           }).catch((err) => {
+            if( err === 'email not verified') {
+              this.dialogVisible = true
+            } else if ( err === 'account not activated') {
+              this.dialogCompte = true
+            }
             this.loading = false
-            console.log(err)
           })
         } else {
           console.log('error submit!!')
@@ -247,7 +315,8 @@ export default {
         }
       })
     }
-  }
+  },
+  computed: mapGetters(['id'])
 }
 </script>
 

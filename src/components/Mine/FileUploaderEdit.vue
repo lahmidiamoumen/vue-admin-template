@@ -3,12 +3,15 @@
       <el-card shadow="never" :body-style="{ padding: '10px' }">
         <div slot="header">
           <span style="font-size: 18px" > {{contextDescription }}</span>
-          <el-tag v-if="hasRemarkD" type="danger" style="font-size: 15px;float: right"  effect="dark">document non-approuvé</el-tag>
-          <dl v-if="hasRemarkD" style="border: 0.5px splid color: #f56c6c;">
+          <el-tag v-if="doc.status === 'nonaprouve' && isPromo" type="danger" style="font-size: 12px;float: right"  effect="dark">document non-approuvé</el-tag>
+          <el-tag v-if="doc.status === 'aprouve'" type="success" style="font-size: 12px;float: right"  effect="dark">document approuvé</el-tag>
+          <el-tag v-if="doc.status === 'corrected' && isEval" type="info" style="font-size: 12px;float: right"  effect="dark">document corrigé</el-tag>
+          <dl v-if="doc.hasRemark" style="border: 0.5px splid color: #f56c6c;">
                 <el-divider content-position="left"> <dt style="color: #f56c6c; margin-right: 8px;font-size: 16px"><b>Remarque</b></dt></el-divider>               
-                <dd>{{remrqueD}}</dd>
+                <dd>{{doc.remarque}}</dd>
                 <dd style="margin-top: 6px;">
                   <el-upload
+                  v-if="isPromo"
                     action="'"
                     :on-error="handelError"
                     :on-success="handelSuccess"
@@ -29,12 +32,12 @@
                 </dd>
               </dl>
         </div>
-        <el-link type="primary" :href="value">Voire document</el-link>
-        <div style="float: right">
-          <el-button type="danger" size="mini" @click="lanuchRemarque()">
+        <el-link type="primary" :href="doc.value">Voire document</el-link>
+        <div v-if="doc.status !== 'aprouve' && isEval" style="float: right">
+          <el-button :disabled="doc.hasRemark" type="danger" size="mini" @click="lanuchRemarque()">
             Ajouter remarques
           </el-button>
-          <el-button type="primary" size="mini" @click="false">
+          <el-button :disabled="doc.hasRemark" type="primary" size="mini" @click="aproved()">
             Approuvé
           </el-button>
         </div>
@@ -58,23 +61,23 @@
 
 </template>
 <script>
-import {addRemark} from '@/api/essai'
+import {addRemark, changeStatus} from '@/api/essai'
+import { mapGetters } from 'vuex'
+
 
 export default {
   name: 'FileUploaderEdit',
   props: {
     contextDescription: { type: String, default: '' },
     commit: { type: String, default: '' },
-    value: { type: String, default: '' },
-    remrque: { type: String, default: '' },
-    hasRemark: { type: Boolean, default: false }
+    doc: { type: Object, default: () => ({})},
   },
   data() {
     return {
       showDialog: false,
-      remrqueD: this.remrque,
-      hasRemarkD: this.hasRemark,
-      temp: { remrque: '',commit: ''},
+      remrqueD: this.doc.remarque,
+      hasRemarkD: this.doc.hasRemark,
+      temp: { remrque: '',commit: '' },
       dom: { remrque: [{required: true, message: 'Ce champ est obligatoire', trigger: 'blur' }] },
       myHeaders: { 'authorization': this.$store.state.user.token },
       uploadPercentage: 0,
@@ -82,13 +85,27 @@ export default {
     }
   },
   computed: {
-    getId: {
-      get: function() {
-        return this.$route.params && this.$route.params.id
-      }
-    }
+    ...mapGetters([
+      'roles'
+    ]),
+    isPromo: { get: function() { return this.roles.includes('promo') }},
+    isValid: { get: function() { return this.roles.includes('valid') }},
+    isEval: { get: function() { return this.roles.includes('eval') }},
+    getId: { get: function() { return this.$route.params && this.$route.params.id }}
   },
   methods: {
+    aproved(){
+      changeStatus(this.getId, {commit: this.commit} ).then((response) => {
+        if( response.data.essai > 0) { 
+                this.$emit('update:doc', { 
+                remarque: '',
+                hasRemark: false,
+                status: 'aprouve',
+                value: this.doc.value
+              })  
+            }
+      })
+    },
     lanuchRemarque() {
       this.showDialog = true
       this.$nextTick(() => {
@@ -100,14 +117,17 @@ export default {
         if (valid) {
           this.showDialog = false
           this.temp.commit = this.commit
-          addRemark(this.getId,this.temp).then((response) => {
-            if( response.data.essai > 0){
-              console.log(response.data.essai)
-              this.remrqueD = this.temp.remrque
-              this.hasRemarkD = true
-            }
-          })
           
+          addRemark(this.getId,this.temp).then((response) => {
+            if( response.data.essai > 0) { 
+                this.$emit('update:doc', { 
+                remarque: this.temp.remrque,
+                hasRemark: true,
+                status: 'nonaprouve',
+                value: this.doc.value
+              })  
+            }
+          }) 
         }
       })
     },

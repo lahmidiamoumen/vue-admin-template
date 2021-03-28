@@ -4,6 +4,7 @@ import { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
+  id: '',
   nom: '',
   prenom: '',
   username: '',
@@ -17,6 +18,9 @@ const state = {
 }
 
 const mutations = {
+  SET_ID: (state, token) => {
+    state.id = token
+  },
   SET_TOKEN: (state, token) => {
     state.token = token
   },
@@ -59,9 +63,17 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
         const token = 'Bearer ' + response.data.token
-        commit('SET_TOKEN', token)
-        setToken(token)
-        resolve()
+        console.log(response.data)
+        commit('SET_ID', response.data.userId)
+        if(!response.data.emailVerified ) {
+          reject("email not verified")
+        } else if(!response.data.actif){
+          reject("account not activated")
+        } else {
+          commit('SET_TOKEN', token)
+          setToken(token)
+          resolve()
+        }
       }).catch(error => {
         reject(error)
       })
@@ -79,7 +91,7 @@ const actions = {
           reject('Verification failed, please Login again.')
         }
 
-        const { nom, prenom, fonction, etablissement, adresse, telephone, email, auProfilDe, userName, grade } = data.user
+        const { _id, nom, prenom, fonction, etablissement, adresse, telephone, email, auProfilDe, userName, grade } = data.user
 
         // roles must be a non-empty array
         if (!grade) {
@@ -87,6 +99,7 @@ const actions = {
         }
         console.log(nom)
 
+        commit('SET_ID', _id)
         commit('SET_NAME', nom)
         commit('SET_PRENOM', prenom)
         commit('SET_USERNAME', userName)

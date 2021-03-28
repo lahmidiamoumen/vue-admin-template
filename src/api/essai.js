@@ -16,6 +16,21 @@ export function fetchListAll(query) {
   })
 }
 
+export function fetchMyListEval(query) {
+  return request({
+    url: '/essais/getMyEssaisEval',
+    method: 'get',
+    params: query
+  })
+}
+
+export function getMetrics() {
+  return request({
+    url: '/essais/getMetrics',
+    method: 'get'
+  })
+}
+
 export function fetchArticle(id) {
   return request({
     url: '/essais/getEssaiFullData',
@@ -29,6 +44,21 @@ export function addRemark(id, data) {
     url: `/essais/addRemark/${id}`,
     method: 'patch',
     data
+  })
+}
+
+export function changeStatus(id, data) {
+  return request({
+    url: `/essais/changeStatus/${id}`,
+    method: 'patch',
+    data
+  })
+}
+
+export function handelEssai(id) {
+  return request({
+    url: `/essais/handelEssai/${id}`,
+    method: 'patch'
   })
 }
 

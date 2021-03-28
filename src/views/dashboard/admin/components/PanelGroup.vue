@@ -9,7 +9,7 @@
           <div class="card-panel-text">
             les essais
           </div>
-          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="essais" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -35,7 +35,7 @@
           <div class="card-panel-text">
             validated
           </div>
-          <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="validated" :duration="3200" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -48,7 +48,7 @@
           <div class="card-panel-text">
             evaluated
           </div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="evaluated" :duration="3600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -57,12 +57,30 @@
 
 <script>
 import CountTo from 'vue-count-to'
+import { getMetrics } from '@/api/essai'
 
 export default {
   components: {
     CountTo
   },
+  created() {
+    this.getMetricsMetho()
+  },
+  data() {
+    return {
+      essais: 0,
+      validated: 0,
+      evaluated: 0
+    }
+  },
   methods: {
+    getMetricsMetho() {
+      getMetrics().then((response) => {
+        this.essais = response.data.nbrEssai
+        this.validated = response.data.nbrValidated
+        this.evaluated = response.data.nbrEvaluated
+      })
+    },
     handleSetLineChartData(type) {
       this.$emit('handleSetLineChartData', type)
     }

@@ -8,6 +8,21 @@ export function login(data) {
   })
 }
 
+export function activateEmail(data, id) {
+  return request({
+    url: `/users/activateEmail/${id}`,
+    method: 'patch',
+    data
+  })
+}
+
+export function activateAccount(id) {
+  return request({
+    url: `/users/activateAccount/${id}`,
+    method: 'patch'
+  })
+}
+
 export function createEval(data) {
   return request({
     url: '/users/createEval',

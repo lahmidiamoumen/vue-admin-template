@@ -44,13 +44,13 @@
       </el-table-column>
 
       <el-table-column align="center" label="Actions" width="180" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <router-link :to="'/essai-liste/edit/'+scope.row._id">
+        <template slot-scope="{row}">
+          <router-link :to="'/essai-liste/edit/'+row._id">
             <el-button type="primary" size="mini">
               Consulter
             </el-button>
           </router-link>
-          <el-button v-if="notProm" size="mini" type="success" style="margin-left:5px" @click="handleModifyStatus(row._id)">
+          <el-button v-if="notProm && !row.evaluatedBy" size="mini" type="success" style="margin-left:5px" @click="handleModifyStatus(row)">
               S'occuper
             </el-button>
         </template>
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { fetchList, fetchListAll } from '@/api/essai'
+import { fetchList, fetchListAll, handelEssai } from '@/api/essai'
 import { mapGetters } from 'vuex'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
@@ -85,7 +85,8 @@ export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        satisfait: 'success',
+        valide: 'success',
+        evalue: 'success',
         ouvert: 'info',
         progress: 'info',
         insatisfait: 'danger'
@@ -94,7 +95,8 @@ export default {
     },
     statusMessage(status) {
       const statusMap = {
-        satisfait: 'satisfait',
+        valide: 'success',
+        evalue: 'success',
         ouvert: 'Ouvert',
         progress: 'Examen en cours',
         insatisfait: 'insatisfait'
@@ -114,8 +116,19 @@ export default {
     }
   },
   methods: {
-    handleModifyStatus(id){
-
+    handleModifyStatus(row) {
+      handelEssai(row._id).then((response) => {
+        if( response.data.essai) { 
+            row.evaluatedBy = 'somt'
+            row.status = 'progress'
+            this.$notify({
+              title: 'Success',
+              message: response.data.essai,
+              type: 'success',
+              duration: 2000
+            })
+        }
+      })
     },
     getList() {
       this.listLoading = true
