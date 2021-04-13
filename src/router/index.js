@@ -15,21 +15,25 @@ export const constantRoutes = [
     path: '/404',
     component: () => import('@/views/404'),
     hidden: true
-  },
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
-    }]
   }
 ]
 
 export const asyncRoutes = [
+  
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/dashboard',
+  
+    children: [
+      {
+        path: 'dashboard',
+        name: 'Dashboard',
+        component: () => import('@/views/dashboard/index'),
+        meta: { title: 'Dashboard',  icon: 'dashboard' }
+      }
+  ]
+  },
   {
     path: '/essai-liste',
     component: Layout,

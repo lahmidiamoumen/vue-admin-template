@@ -264,7 +264,7 @@
 import BackToTop from '@/components/BackToTop'
 import FileUploaderEdit from '@/components/Mine/FileUploaderEdit'
 import MDinput from '@/components/MDinput'
-import { fetchArticle } from '@/api/essai'
+import { fetchArticle, aprroveEval } from '@/api/essai'
 import { mapGetters } from 'vuex'
 
 const defaultForm = {
@@ -340,19 +340,28 @@ export default {
       })
     },
     aproved(){
-      if(this.postForm.declarationAssurance.status === 'satisfait' &&
-          this.postForm.lettreMandat.status === 'satisfait' &&
-          this.postForm.avisFavorableComiteEthique.status === 'satisfait' &&
-          this.postForm.synopsisProtocole.status === 'satisfait' &&
-          this.postForm.protocoleFinal.status === 'satisfait' &&
-          this.postForm.crf.status === 'satisfait' &&
-          this.postForm.rcp.status === 'satisfait' &&
-          this.postForm.ficheInformationPatient.status === 'satisfait' &&
-          this.postForm.modeleFinancier.status === 'satisfait' &&
-          this.postForm.autorisation.status === 'satisfait' &&
-          this.postForm.paiement.status === 'satisfait' &&
-          this.postForm.approbations.status === 'satisfait') {
-
+      if(this.postForm.declarationAssurance.status === 'aprouve' &&
+          this.postForm.lettreMandat.status === 'aprouve' &&
+          this.postForm.avisFavorableComiteEthique.status === 'aprouve' &&
+          this.postForm.synopsisProtocole.status === 'aprouve' &&
+          this.postForm.protocoleFinal.status === 'aprouve' &&
+          this.postForm.crf.status === 'aprouve' &&
+          this.postForm.rcp.status === 'aprouve' &&
+          this.postForm.ficheInformationPatient.status === 'aprouve' &&
+          this.postForm.modeleFinancier.status === 'aprouve' &&
+          this.postForm.autorisation.status === 'aprouve' &&
+          this.postForm.paiement.status === 'aprouve' &&
+          this.postForm.approbations.status === 'aprouve') {
+              aprroveEval(this.$route.params && this.$route.params.id).then((response) => {
+                if( response.data.essai > 0) {
+                  this.$notify({
+                    title: 'Succès',
+                    message: "l'essai cliniue évalué",
+                    type: 'success',
+                    duration: 2000
+                  })
+                } 
+              })
           } else {
             this.$notify({
               title: 'Erreur',

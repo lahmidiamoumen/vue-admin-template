@@ -116,7 +116,7 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/user'
+import { fetchList, activateEval } from '@/api/user'
 import { createEval } from '@/api/user'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import { validEmail } from '@/utils/validate'
@@ -205,9 +205,11 @@ export default {
     handleCreate() {},
     handleModifyStatus(row, status) {
       row.actif = status
-      this.$message({
-        message: status ? 'Compte Activer' : 'Compte Désactiver',
-        type: 'success'
+      activateEval({status: status}, row._id).then(() => {
+        this.$message({
+          message: status ? 'Compte Activer' : 'Compte Désactiver',
+          type: 'success'
+        })
       })
     },
     getList() {

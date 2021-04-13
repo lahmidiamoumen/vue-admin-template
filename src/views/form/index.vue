@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/user'
+import { activateAccount, fetchList } from '@/api/user'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
@@ -146,9 +146,11 @@ export default {
   methods: {
     handleModifyStatus(row, status) {
       row.actif = status
-      this.$message({
-        message: status ? 'Compte Activer' : 'Compte Désactiver',
-        type: 'success'
+      activateAccount({status: status}, row._id).then(() => {
+        this.$message({
+          message: status ? 'Compte Activer' : 'Compte Désactiver',
+          type: 'success'
+        })
       })
     },
     getList() {

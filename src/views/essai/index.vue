@@ -9,7 +9,7 @@
       <el-step title="Etape 3" description="Soumission du dossier" />
     </el-steps>
     <br>
-    <el-row class="components-container" :gutter="20">
+    <el-row class="" :gutter="20">
       <el-col :sm="{span: 24}" :md="{span: 12}" :lg="{span: 8}" :xl="{span: 8}" :offset="0">
         <FileUploader :file="lettreMandat" :view="lettreMandat === ''" commit="lettreMandat" context-description="Lettre mandat du sponsor à la CRO" />
       </el-col>
@@ -19,6 +19,9 @@
       <el-col :sm="{span: 24}" :md="{span: 12}" :lg="{span: 8}" :xl="{span: 8}" :offset="0">
         <FileUploader :file="avisFavorableComiteEthique" :view="avisFavorableComiteEthique === ''" commit="avisFavorableComiteEthique" context-description="Avis favorable du comité d'éthique" />
       </el-col>
+    </el-row>
+
+    <el-row class="" :gutter="20">
 
       <el-col :sm="{span: 24}" :md="{span: 12}" :lg="{span: 8}" :xl="{span: 8}" :offset="0">
         <FileUploader :file="synopsisProtocole" :view="synopsisProtocole === ''" commit="synopsisProtocole" context-description="Synopsis du protocole en français" />
@@ -29,7 +32,10 @@
       <el-col :sm="{span: 24}" :md="{span: 12}" :lg="{span: 8}" :xl="{span: 8}" :offset="0">
         <FileUploader :file="rcp" :view="rcp === ''" commit="rcp" context-description="Brochure investigateur ou RCP du produit le cas échéant" />
       </el-col>
+      
+      </el-row>
 
+    <el-row class="" :gutter="20">
       <el-col :sm="{span: 24}" :md="{span: 12}" :lg="{span: 8}" :xl="{span: 8}" :offset="0">
         <FileUploader :file="crf" :view="crf === ''" commit="crf" context-description="CRF et tout autre documentation qui sera fournie au patient" />
       </el-col>

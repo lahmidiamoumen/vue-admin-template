@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-card shadow="hover" :body-style="{ padding: '20px' }">
-      <small style="margin-bottom: 10px">{{ contextDescription }}</small>
+      <strong style="margin: 5px">{{ contextDescription }}</strong>
       <el-upload
         class="upload-demo"
         style="width: 100%"
@@ -22,7 +22,7 @@
       >
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">Déposez le fichier ici ou <em>cliquez pour télécharger</em></div>
-          <div slot="tip" class="el-upload__tip"> pdf fichies moins de 2mb</div>
+        <div slot="tip" class="el-upload__tip"> pdf fichies moins de 2mb</div>
       </el-upload>
     </el-card>
   </div>

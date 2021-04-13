@@ -46,6 +46,22 @@ export function addRemark(id, data) {
     data
   })
 }
+  
+  
+export function aprroveEval(id) {
+  return request({
+    url: `/essais/aprroveEval/${id}`,
+    method: 'patch'
+  })
+}
+
+
+export function aprroveValid(id) {
+  return request({
+    url: `/essais/aprroveValid/${id}`,
+    method: 'patch'
+  })
+}
 
 export function changeStatus(id, data) {
   return request({

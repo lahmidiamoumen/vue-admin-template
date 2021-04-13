@@ -32,12 +32,12 @@
                 </dd>
               </dl>
         </div>
-        <el-link type="primary" :href="doc.value">Voire document</el-link>
+        <el-link type="primary" :href="`http://localhost:8080/${doc.value}`">Voire document</el-link>
         <div v-if="doc.status !== 'aprouve' && isEval" style="float: right">
-          <el-button :disabled="doc.hasRemark" type="danger" size="mini" @click="lanuchRemarque()">
-            Ajouter remarques
+          <el-button type="danger" size="mini" @click="showDialog = true">
+            {{doc.hasRemark ? 'Modifier' : 'Ajouter'}} remarques
           </el-button>
-          <el-button :disabled="doc.hasRemark" type="primary" size="mini" @click="aproved()">
+          <el-button type="primary" size="mini" @click="aproved()">
             Approuvé
           </el-button>
         </div>
@@ -77,7 +77,7 @@ export default {
       showDialog: false,
       remrqueD: this.doc.remarque,
       hasRemarkD: this.doc.hasRemark,
-      temp: { remrque: '',commit: '' },
+      temp: { remrque: this.doc.remarque ,commit: '' },
       dom: { remrque: [{required: true, message: 'Ce champ est obligatoire', trigger: 'blur' }] },
       myHeaders: { 'authorization': this.$store.state.user.token },
       uploadPercentage: 0,
@@ -95,21 +95,15 @@ export default {
   },
   methods: {
     aproved(){
-      changeStatus(this.getId, {commit: this.commit} ).then((response) => {
+      changeStatus(this.getId, {commit: this.commit,remrque: this.doc.remarque} ).then((response) => {
         if( response.data.essai > 0) { 
                 this.$emit('update:doc', { 
-                remarque: '',
-                hasRemark: false,
+                remarque: this.doc.remarque,
+                hasRemark: this.doc.hasRemark,
                 status: 'aprouve',
                 value: this.doc.value
               })  
             }
-      })
-    },
-    lanuchRemarque() {
-      this.showDialog = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].resetFields()
       })
     },
     addRemarque() {
@@ -133,13 +127,13 @@ export default {
     },
     beforeUpload(file) {
       const isJPG = file.type === 'application/pdf'
-      const isLt2M = file.size / 1024 / 1024 < 2
+      const isLt2M = file.size / 1024 / 1024 < 5
       console.log(this.myHeaders)
       if (!isJPG) {
         this.$message.error('les fichies pdf uniquement!')
       }
       if (!isLt2M) {
-        this.$message.error('la taile de fichier est sup de 2MB!')
+        this.$message.error('la taile de fichier est sup de 5MB!')
       }
       return isJPG && isLt2M
     },

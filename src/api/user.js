@@ -16,10 +16,19 @@ export function activateEmail(data, id) {
   })
 }
 
-export function activateAccount(id) {
+export function activateEval(data, id) {
+  return request({
+    url: `/users/activateEval/${id}`,
+    method: 'patch',
+    data
+  })
+}
+
+export function activateAccount(data, id) {
   return request({
     url: `/users/activateAccount/${id}`,
-    method: 'patch'
+    method: 'patch',
+    data
   })
 }
 

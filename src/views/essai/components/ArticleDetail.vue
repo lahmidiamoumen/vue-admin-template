@@ -286,7 +286,7 @@
         <br>
         <el-card shadow="never" class="app-container" :body-style="{ padding: '5px'}">
           <el-form-item style="float: right;margin: 40px">
-            <router-link :to="'/guide/index'" class="link-type" style="margin:8px"><el-button> Etape précédente </el-button> </router-link>
+            <router-link :to="'/essai/index'" class="link-type" style="margin:8px"><el-button> Etape précédente </el-button> </router-link>
             <el-button type="primary" @click="submitForm()">Etape suivante</el-button>
           </el-form-item>
         </el-card>

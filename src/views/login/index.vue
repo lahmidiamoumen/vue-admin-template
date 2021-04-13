@@ -177,16 +177,16 @@ export default {
         code: ''
       },
       temp: {
-        email: '',
-        userName: '',
-        passWord: '',
-        nom: '',
-        prenom: '',
-        fonction: '',
-        etablissement: '',
-        adresse: '',
-        telephone: '',
-        auProfilDe: '',
+        email: undefined,
+        userName: undefined,
+        passWord: undefined,
+        nom: undefined,
+        prenom: undefined,
+        fonction: undefined,
+        etablissement: undefined,
+        adresse: undefined,
+        telephone: undefined,
+        auProfilDe: undefined,
       },
       dom: {
         nom: [
@@ -236,9 +236,9 @@ export default {
   methods: {
     launchDialogue() {
       this.showDialog = true
-      this.$nextTick(() => {
+      /* this.$nextTick(() => {
         this.$refs['dataForm'].resetFields();
-      })
+      }) */
     },
     verifyEmail() {
       this.$refs['dataEmail'].validate((valid) => {
@@ -246,15 +246,21 @@ export default {
           this.dialogVisible = false
           activateEmail(this.email,this.id).then((response) => {
             if (response.data.active) {
+              this.$notify({
+                title: 'Succès',
+                message: 'Votre email est vérifier',
+                type: 'success',
+                duration: 2000
+              })
               this.loading = true
               this.$store.dispatch('user/login', this.loginForm).then(() => {
               this.$router.push({ path: this.redirect || '/' })
               this.loading = false
             }).catch((err) => {
               this.$notify({
-                message: err,
+                message: 'Compte désactivé',
                 type: 'error',
-                duration: 2000
+                duration: 4000
               })
               this.loading = false
             })
@@ -271,12 +277,10 @@ export default {
         if (valid) {
           this.showDialog = false
           createUser(this.temp).then(() => {
-            const createdAt = Date.now() 
-            this.list.unshift({...this.temp,createdAt })
             this.showDialog = false
             this.$notify({
-              title: 'Success',
-              message: 'Évaluateur avec succès',
+              title: 'Succès',
+              message: 'Votre compte a été créé avec succès',
               type: 'success',
               duration: 2000
             })
