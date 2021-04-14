@@ -24,6 +24,14 @@ export function fetchMyListEval(query) {
   })
 }
 
+export function fetchMyListValid(query) {
+  return request({
+    url: '/essais/getMyEssaisValid',
+    method: 'get',
+    params: query
+  })
+}
+
 export function getMetrics() {
   return request({
     url: '/essais/getMetrics',

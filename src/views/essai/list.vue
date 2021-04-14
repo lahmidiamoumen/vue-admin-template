@@ -35,7 +35,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column class-name="status-col" label="Status" width="110">
+      <el-table-column class-name="status-col" label="Status" width="130">
         <template slot-scope="{row}">
           <el-tag :type="row.status | statusFilter">
             {{ row.status | statusMessage }}
@@ -50,7 +50,7 @@
               Consulter
             </el-button>
           </router-link>
-          <el-button v-if="notProm && !row.evaluatedBy" size="mini" type="success" style="margin-left:5px" @click="handleModifyStatus(row)">
+          <el-button v-if="notProm && notValid && !row.evaluatedBy" size="mini" type="success" style="margin-left:5px" @click="handleModifyStatus(row)">
               S'occuper
             </el-button>
         </template>
@@ -73,7 +73,8 @@ export default {
     ...mapGetters([
       'roles'
     ]),
-    notProm () { return !this.roles.includes('promo')}
+    notProm () { return !this.roles.includes('promo')},
+    notValid () { return !this.roles.includes('valid')}
   },
   created() {
     if (this.notProm) {
@@ -95,11 +96,11 @@ export default {
     },
     statusMessage(status) {
       const statusMap = {
-        valide: 'success',
-        evalue: 'success',
+        valide: 'Validé ',
+        evalue: 'Évalué',
         ouvert: 'Ouvert',
         progress: 'Examen en cours',
-        insatisfait: 'insatisfait'
+        insatisfait: 'Insatisfait'
       }
       return statusMap[status]
     }

@@ -62,7 +62,7 @@
 <script>
 //import { transactionList } from '@/api/remote-search'
 import Pagination from '@/components/Pagination'
-import { fetchMyListEval, fetchListAll } from '@/api/essai'
+import { fetchMyListEval, fetchMyListValid } from '@/api/essai'
 import { mapGetters } from 'vuex'
 
 
@@ -94,11 +94,11 @@ export default {
     },
     statusMessage(status) {
       const statusMap = {
-        valide: 'success',
-        evalue: 'success',
+        valide: 'Validé ',
+        evalue: 'Évalué',
         ouvert: 'Ouvert',
         progress: 'Examen en cours',
-        insatisfait: 'insatisfait'
+        insatisfait: 'Insatisfait'
       }
       return statusMap[status]
     }
@@ -125,7 +125,7 @@ export default {
     },
     getListAll() {
       this.listLoading = true
-      fetchListAll(this.listQuery).then(response => {
+      fetchMyListValid(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = Number.isNaN(parseInt(response.data.total)) ? 0 : parseInt(response.data.total)
         this.listLoading = false

@@ -32,7 +32,7 @@
                     <span>Essai</span>
                   </div>
                 <el-form-item style="margin-bottom: 40px;" prop="titre">
-                  <MDinput :value="postForm.titre" disabled :maxlength="100" style="width: 90%;" required>
+                  <MDinput :value="postForm.titre" disabled :maxlength="100" style="width: 90%;" >
                     Titre de l'essai
                   </MDinput>
                 </el-form-item>
@@ -41,27 +41,28 @@
                   <el-input :value="postForm.objectif" disabled type="textarea" style="width: 90%;color: #333" />
                 </el-form-item>
 
-                <el-form-item label="Recherche avec bénéfice individuel direct :" required prop="rechercheBeneficeIndividuel" label-width="360px" size="small">
+                <el-form-item label="Recherche avec bénéfice individuel direct :"  prop="rechercheBeneficeIndividuel" label-width="360px" size="small">
                   <el-radio-group  :value="postForm.rechercheBeneficeIndividuel">
                     <el-radio :label="postForm.rechercheBeneficeIndividuel" border size="mini">{{ postForm.rechercheBeneficeIndividuel ? 'Oui' : 'Non'}}</el-radio>
                   </el-radio-group>
                 </el-form-item>
 
-                <el-form-item label="Phase d'expérimentation clinique :" label-width="360px" required prop="phaseExperimentationClinique" size="small">
+                <el-form-item label="Phase d'expérimentation clinique :" label-width="360px"  prop="phaseExperimentationClinique" size="small">
                   <el-radio-group  :value="postForm.phaseExperimentationClinique">
                     <el-radio :label="postForm.phaseExperimentationClinique" border size="mini" />
                   </el-radio-group>
                 </el-form-item>
 
-                  <el-form-item label="Essai:" required prop="essai" label-width="360px" size="small">
+                  <el-form-item label="Essai:"  label-width="360px" >
                     <el-input :value="postForm.essai" disabled placeholder="Select" style="width: 90%;"/>
                   </el-form-item>
                 
-                  <br>
-                  <el-form-item label="Etude de bioéquivalence" label-width="360px" required>
+                  <el-form-item label="Etude de bioéquivalence" label-width="360px" >
                     <el-input :value="postForm.etudeBioequivalence" disabled style="width: 90%;"/>
                   </el-form-item>
-                  <br>                 
+                  <el-form-item label="Etude Observationnelle:" label-width="360px" >
+                    <el-input :value="postForm.etudeObservationnelle" disabled style="width: 90%;"/>
+                  </el-form-item>
                   <el-row>
                     <el-col :span="8" :offset="4">
                       <el-form-item label="Date prévue pour le début de la recherche" >
@@ -143,7 +144,7 @@
                 <el-input disabled :value="postForm.medicamentReference.compositionQualitativeQuantitative" placeholder="en utilisants les dénominations communes internationales" style="width:60%" />
               </el-form-item>
 
-              <el-form-item label="Posologie  " label-width="360px" required>
+              <el-form-item label="Posologie  " label-width="360px" >
                 <el-input disabled :value="postForm.medicamentReference.posologie" style="width:60%" />
               </el-form-item>
 
@@ -154,7 +155,7 @@
             <br>
             <el-divider content-position="left">INVESTIGATEUR(S)</el-divider>
             <br>
-
+              <el-link v-if="postForm.investigateurFile" type="primary" :href="`http://localhost:8080/${postForm.investigateurFile}`">Fichier des investigateur</el-link>
               <el-table :data="postForm.investigateur" align="center" style="width: 100%">
                 <el-table-column label="Nom(s) et Prénom(s)" width="220px" align="center">
                   <template slot-scope="{row}">
@@ -201,7 +202,6 @@
               <el-form-item label="Durée du traitement ou de la participation par personne" label-width="360px">
                 <el-input-number :value="postForm.personne.duree" :min="0" disabled size="medium" placeholder="Aa..." style="width:60%" />
               </el-form-item>
-            <br>
             <el-divider content-position="left">COMITE D'ETHIQUE</el-divider>
             <br>
               <el-form-item label="Comité (nom et adresse)" label-width="360px">
@@ -212,7 +212,6 @@
               </el-form-item>
             <br> 
           </el-card>
-
           </div>
         </el-form>
       </el-collapse-item>
@@ -245,9 +244,9 @@
     </el-collapse>
 
     <br>
-    <el-card v-if="(postForm.evaluatedBy && postForm.evaluatedBy === id) ||  roles.includes('valid')" shadow="hover" :body-style="{ padding: '20px' }">
+    <el-card v-if="(postForm.evaluatedBy && postForm.evaluatedBy === id && postForm.status !== 'evalue') ||  roles.includes('valid') && postForm.status !== 'valide'" shadow="hover" :body-style="{ padding: '20px' }">
       <div style="float: right; padding: 20px">
-        <el-button type="success" style=" width: 200px" size="big" @click="aproved()">
+        <el-button :disabled="roles.includes('valid') && postForm.status !== 'evalue'" type="success" style=" width: 200px" size="big" @click="aproved()">
           Approuvé
         </el-button>
       </div>
@@ -264,7 +263,7 @@
 import BackToTop from '@/components/BackToTop'
 import FileUploaderEdit from '@/components/Mine/FileUploaderEdit'
 import MDinput from '@/components/MDinput'
-import { fetchArticle, aprroveEval } from '@/api/essai'
+import { fetchArticle, aprroveEval, aprroveValid } from '@/api/essai'
 import { mapGetters } from 'vuex'
 
 const defaultForm = {
@@ -274,6 +273,7 @@ const defaultForm = {
   phaseExperimentationClinique: '',
   essai: '',
   etudeBioequivalence: '',
+  etudeObservationnelle: '',
   datePrevuDebut: '',
   dureePrevuDebut: 0,
   medicament: {
@@ -301,6 +301,7 @@ const defaultForm = {
     formePharmaceutique: '',
     fabricant: ''
   },
+  investigateurFile: '',
   personne: {
     prevu: 0,
     therapeutique: '',
@@ -339,8 +340,28 @@ export default {
           this.postForm = Object.assign({}, response.data.essai)
       })
     },
-    aproved(){
-      if(this.postForm.declarationAssurance.status === 'aprouve' &&
+    aproved() {
+      if( this.roles.includes('valid') ) {
+          aprroveValid(this.$route.params && this.$route.params.id).then((response) => {
+            if( response.data.essai > 0) {
+              this.$notify({
+                title: 'Succès',
+                message: "l'essai clinique validité",
+                type: 'success',
+                duration: 2000
+              })
+            }
+            else {
+              this.$notify({
+                title: 'Erreur',
+                message: "l'essai clinique non évalué",
+                type: 'error',
+                duration: 2000
+              })
+            } 
+          })
+      }
+      else if(this.postForm.declarationAssurance.status === 'aprouve' &&
           this.postForm.lettreMandat.status === 'aprouve' &&
           this.postForm.avisFavorableComiteEthique.status === 'aprouve' &&
           this.postForm.synopsisProtocole.status === 'aprouve' &&
@@ -356,20 +377,20 @@ export default {
                 if( response.data.essai > 0) {
                   this.$notify({
                     title: 'Succès',
-                    message: "l'essai cliniue évalué",
+                    message: "l'essai clinique évalué",
                     type: 'success',
                     duration: 2000
                   })
                 } 
               })
-          } else {
-            this.$notify({
-              title: 'Erreur',
-              message: "Approuvés tous les fichiers d'abord",
-              type: 'error',
-              duration: 2000
-            })
-          }
+        } else {
+          this.$notify({
+            title: 'Erreur',
+            message: "Approuvés tous les fichiers d'abord",
+            type: 'error',
+            duration: 2000
+          })
+        }
     }
   },
   computed: {

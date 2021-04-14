@@ -44,38 +44,67 @@
             <el-row :gutter="0">
               <br>
                 <template>
-                <el-form-item label="Essai:" required prop="essai" >
-                  <el-col :span="11" :offset="0">
-                    <el-select v-model.lazy="postForm.essai" filterable placeholder="Select" style="width: 100%;">
+                <el-form-item label="Essai:" >
+                  <el-col :span="22" :offset="0">
+                    <el-drag-select multiple v-model.lazy="postForm.essai" filterable placeholder="Select ou préciser un autre..." style="width: 700px;">
                       <el-option
                         v-for="item in options"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value"
                       />
-                    </el-select>
+                    </el-drag-select>
                     </el-col>
-                    <el-col :span="1" :offset="1" class="line">ou</el-col>
+                    <!-- <el-col :span="1" :offset="1" class="line">ou</el-col>
                     <el-col :span="11" :offset="0">
                         <el-input v-model.lazy="postForm.essai" :rows="1" placeholder="autre, à préciser :" type="textarea" class="article-textarea" autosize />
-                    </el-col>
+                    </el-col> -->
                 </el-form-item>
                 </template>
             </el-row>
+             <el-row :gutter="0">
               <br>
-              <el-form-item label="Etude de bioéquivalence" required>
-                <el-input v-model.lazy="postForm.etudeBioequivalence" />
-              </el-form-item>
+                <template>
+                <el-form-item label="Etude Observationnelle:"  >
+                  <el-col :span="22" :offset="0">
+                    <el-drag-select v-model.lazy="postForm.etudeObservationnelle" filterable multiple placeholder="Select ou préciser un autre.." style="width: 700px;">
+                      <el-option
+                        v-for="item in optionEtude"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      />
+                    </el-drag-select>
+                    <!-- <el-select v-model.lazy="postForm.etudeObservationnelle" filterable placeholder="Select" style="width: 100%;">
+                      <el-option
+                        v-for="item in optionEtude"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      />
+                    </el-select> -->
+                    </el-col>
+                    <!-- <el-col :span="1" :offset="1" class="line">ou</el-col>
+                    <el-col :span="11" :offset="0">
+                        <el-input v-model.lazy="postForm.etudeObservationnelle" :rows="1" placeholder="autre, à préciser :" type="textarea" class="article-textarea" autosize />
+                    </el-col> -->
+                </el-form-item>
+                </template>
+            </el-row>
+            <br>
+            <el-form-item label="Etude de bioéquivalence">
+              <el-input v-model.lazy="postForm.etudeBioequivalence" />
+            </el-form-item>
             <div class="postInfo-container">
               <el-row :gutter="0">
                 <el-col :span="12" :offset="0">
-                  <el-form-item label="Date prévue pour le début de la recherche">
-                    <el-date-picker v-model.lazy="displayTime" type="date" format="yyyy-MM-dd" style="width: 100%;" placeholder="Select date and time" />
+                  <el-form-item label="Date prévue pour le début de la recherche" prop="datePrevuDebut" required>
+                    <el-date-picker v-model.lazy="displayTime" type="date" format="yyyy-MM-dd" style="width: 250px;" placeholder="Select date and time" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                  <el-form-item label="Durée prévue" label-width="140px">
-                    <el-input-number v-model.lazy="postForm.dureePrevuDebut" style="width: 80%;" :min="0" size="medium" />
+                  <el-form-item label="Durée prévue" prop="dureePrevuDebut" required label-width="200px">
+                    <el-input-number v-model.lazy="postForm.dureePrevuDebut" style="width: 170px;" :min="0" size="medium" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -188,26 +217,26 @@
         <el-card shadow="hover" class="app-container" :body-style="{ padding: '0px', paddingRight: '60px'}">
          <p class="headon">MEDICAMENT OU PRODUIT DE REFERENCE</p>
         <br>
-          <el-form-item label="Dénomination spéciale" >
+          <el-form-item label="Dénomination spéciale" prop="produitDenomination" >
             <el-input v-model.lazy="postForm.medicamentReference.denominationSpeciale" />
           </el-form-item>
-          <el-form-item label="Dénomination scientifique et DCI du (des) principe(s) actif(s)" >
+          <el-form-item label="Dénomination scientifique et DCI du (des) principe(s) actif(s)"  prop="produitDCI">
             <el-input v-model.lazy="postForm.medicamentReference.DCI" />
           </el-form-item>
 
-          <el-form-item label="Forme pharmaceutique" >
+          <el-form-item label="Forme pharmaceutique" prop="produitPharmaceutique">
             <el-input v-model.lazy="postForm.medicamentReference.formePharmaceutique" placeholder="pharmacopée" />
           </el-form-item>
 
-          <el-form-item label="Composition qualitative et quantitative en principe actifs" >
+          <el-form-item label="Composition qualitative et quantitative en principe actifs" prop="produitComposition">
             <el-input v-model.lazy="postForm.medicamentReference.compositionQualitativeQuantitative" placeholder="en utilisants les dénominations communes internationales" />
           </el-form-item>
 
-          <el-form-item label="Posologie  "  required>
+          <el-form-item label="Posologie  " prop="produitPosologie" >
             <el-input v-model.lazy="postForm.medicamentReference.posologie" />
           </el-form-item>
 
-          <el-form-item label="Fabricant(s)" >
+          <el-form-item label="Fabricant(s)" prop="produitFabricant" >
             <el-input v-model.lazy="postForm.medicamentReference.fabricant" placeholder="nom(s) ou dénomination(s) et lieu(x) de fabrication" />
           </el-form-item>
 
@@ -215,10 +244,10 @@
         <br>
         <el-card shadow="hover" class="app-container" :body-style="{ padding: '0px', paddingRight: '60px'}">
           <p class="headon">PLACEBO</p> <br>
-          <el-form-item label="Forme pharmaceutique" >
+          <el-form-item label="Forme pharmaceutique" prop="placeboPharmaceutique">
             <el-input v-model.lazy="postForm.placebo.formePharmaceutique" placeholder="pharmacopée" />
           </el-form-item>
-          <el-form-item label="Fabricant(s)" >
+          <el-form-item label="Fabricant(s)" prop="placeboFabricant">
             <el-input v-model.lazy="postForm.placebo.fabricant" placeholder="nom(s) ou dénomination(s) et lieu(x) de fabrication" />
           </el-form-item>
 
@@ -227,7 +256,28 @@
         <el-card shadow="hover" class="app-container" :body-style="{ padding: '0px', paddingRight: '60px'}">
           <p class="headon">INVESTIGATEUR(S)</p><br>
           <div class="filter-container">
-            <el-button class="filter-item" style="float: right" type="primary" icon="el-icon-edit" @click="handleInvestigateur">
+            
+            <el-upload
+              class="upload-demo"
+              style="float: right; margin: 0px 8px"
+              :action="'http://localhost:8080/api/essais/uploadEssaiClinique'"
+              :on-error="handelError"
+              :on-success="handelSuccess"
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :before-upload="beforeUpload"
+              :before-remove="beforeRemove"
+              :on-exceed="handleExceed"
+              name="file"
+              :headers="myHeaders"
+              :limit="1"
+              accept="application/pdf"
+              :file-list="fileList"
+            >
+                <el-button size="small" type="primary">télécharger un fichier</el-button>
+              <div slot="tip" class="el-upload__tip"> pdf fichies moins de 5mb</div>
+            </el-upload>
+            <el-button class="filter-item" size="small" style="float: right" type="primary" icon="el-icon-edit" @click="handleInvestigateur">
               Ajouter
             </el-button>
           </div>
@@ -254,19 +304,19 @@
           <p class="headon">PERSONNES SE PRETANT A LA RECHERCHE</p>
           <br>
 
-          <el-form-item label="Nombre prévu de personnes" >
-            <el-input-number v-model.lazy="postForm.personne.prevu" :min="0" size="medium" placeholder="Aa..." style="width:20%" />
+          <el-form-item label="Nombre prévu de personnes" required prop="personne.prevu" >
+            <el-input-number v-model.lazy="postForm.personne.prevu" :min="0" size="medium" placeholder="Aa..." style="width:200px" />
           </el-form-item>
 
-          <el-form-item label="Durée du traitement ou de la participation par personne" >
-            <el-input-number v-model.lazy="postForm.personne.duree" :min="0" size="medium" placeholder="Aa..." style="width:20%" />
+          <el-form-item label="Durée du traitement ou de la participation par personne" prop="personne.duree" required>
+            <el-input-number v-model.lazy="postForm.personne.duree" :min="0" size="medium" placeholder="Aa..." style="width:200px" />
           </el-form-item>
 
-          <el-form-item label="Indication thérapeutique" >
+          <el-form-item label="Indication thérapeutique" prop="personne.therapeutique" >
             <el-input v-model.lazy="postForm.personne.therapeutique" placeholder="Aa..." />
           </el-form-item>
 
-          <el-form-item label="Principaux critères d'inclusion" >
+          <el-form-item label="Principaux critères d'inclusion" prop="personne.criteres" required>
             <el-input v-model.lazy="postForm.personne.criteres" placeholder="Aa..." />
           </el-form-item>
 
@@ -320,9 +370,10 @@
 
     <el-dialog title="MEDICAMENT OU PRODUIT ETUDIE" :visible.sync="dialogFormVisible" width="900px">
       <el-form ref="dataForm" :rules="rules" :model="postMedicamentEtude" label-position="right" label-width="270px" style="padding: 0px 10px">
-        <el-form-item label="Dénomination spéciale" prop="medicamentDenomination">
-            <el-input v-model.lazy="postMedicamentEtude.denominationSpeciale" />
+          <el-form-item label="Dénomination spéciale" required prop="medicamentDenomination">
+            <el-input v-model.lazy="postMedicamentEtude.denominationSpeciale"  />
           </el-form-item>
+        
           <el-form-item label="Nom de code" prop="medicamentCode">
             <el-input v-model.lazy="postMedicamentEtude.nomDeCode" />
           </el-form-item>
@@ -362,7 +413,7 @@
           </el-form-item>
 
           <el-form-item label="Etranger" label-width="90px">
-            <el-input v-model.lazy="postMedicamentEtude.Etranger" :disabled="postMedicamentEtude.Algerie !== 'non'" placeholder="nom(s) ou dénomination(s) et lieu(x) de fabrication" />
+            <el-input v-model.lazy="postMedicamentEtude.Etranger" :disabled="!postMedicamentEtude.Algerie.includes('non')" placeholder="nom(s) ou dénomination(s) et lieu(x) de fabrication" />
           </el-form-item>
       </el-form>
       <div slot="footer" >
@@ -379,10 +430,11 @@
     </el-tooltip>
   </div>
 </template>
-
 <script>
 import BackToTop from '@/components/BackToTop'
 import MDinput from '@/components/MDinput'
+import ElDragSelect from '@/components/DragSelect' // base on element-ui
+
 
 const investigateur= {
   fullname: '',
@@ -408,6 +460,7 @@ const defaultForm = {
   phaseExperimentationClinique: '',
   essai: '',
   etudeBioequivalence: '',
+  etudeObservationnelle: '',
   datePrevuDebut: '',
   dureePrevuDebut: 0,
   medicament: {
@@ -423,6 +476,7 @@ const defaultForm = {
   },
   medicamentEtudie: [],
   investigateur: [],
+  investigateurFile: '',
   medicamentReference: {
     denominationSpeciale: '',
     DCI: '',
@@ -448,9 +502,60 @@ const defaultForm = {
   status: ''
 }
 
+const optionEtude = [  {
+    value: 'Pharmacovigilance',
+    label: 'Pharmacovigilance'
+  },{
+    value: 'Pharmacoépidémiologie',
+    label: 'Pharmacoépidémiologie'
+  },{
+    value: 'Cohorte',
+    label: 'Cohorte'
+  },{
+    value: 'Prévalence',
+    label: 'Prévalence'
+  },{
+    value: 'Pharmacoéconomie',
+    label: 'Pharmacoéconomie'
+  },{
+    value: 'Cas-témoins',
+    label: 'Cas-témoins'
+  }
+]
+
+const optionEssai = [{
+    value: 'Contrôlé',
+    label: 'Contrôlé'
+  }, {
+    value: 'Multicentrique',
+    label: 'Multicentrique'
+  }, {
+    value: 'international',
+    label: 'international'
+  }, {
+    value: 'randomisé',
+    label: 'randomisé'
+  }, {
+    value: 'simple insu',
+    label: 'simple insu'
+  }, {
+    value: 'double insu',
+    label: 'double insu'
+  }, {
+    value: 'croisé',
+    label: 'croisé'
+  }, {
+    value: 'groupes parallèles',
+    label: 'groupes parallèles'
+  }, {
+    value: 'ouvert',
+    label: 'ouvert'
+  }
+]
+
 export default {
   name: 'ArticleDetail',
-  components: { MDinput, BackToTop },
+  components: { MDinput, BackToTop, ElDragSelect },
   props: {
     isEdit: {
       type: Boolean,
@@ -460,45 +565,17 @@ export default {
   data() {
     const validateRequire = (rule, value, callback) => {
       if (value === '') {
-        /* this.$message({
-          message: rule.field + ' est champ obligatoire',
-          type: 'error'
-        }) */
         callback(new Error('Ce champ est obligatoire'))
       } else {
         callback()
       }
     }
     return {
-      options: [{
-        value: 'Contrôlé',
-        label: 'Contrôlé'
-      }, {
-        value: 'Multicentrique',
-        label: 'Multicentrique'
-      }, {
-        value: 'international',
-        label: 'international'
-      }, {
-        value: 'randomisé',
-        label: 'randomisé'
-      }, {
-        value: 'simple insu',
-        label: 'simple insu'
-      }, {
-        value: 'double insu',
-        label: 'double insu'
-      }, {
-        value: 'croisé',
-        label: 'croisé'
-      }, {
-        value: 'groupes parallèles',
-        label: 'groupes parallèles'
-      }, {
-        value: 'ouvert',
-        label: 'ouvert'
-      }
-      ],
+      myHeaders: { 'authorization': this.$store.state.user.token },
+      uploadPercentage: 0,
+      fileList: [],
+      options: optionEssai,
+      optionEtude: optionEtude,
       postForm: Object.assign({}, defaultForm),
       postMedicamentEtude: Object.assign({}, medicamentEtude),
       postInvestigateur: Object.assign({}, investigateur),
@@ -507,13 +584,14 @@ export default {
       dialogFormVisible: false,
       dialogInvestigateurVisible: false,
       rules: {
-        titre: [{ validator: validateRequire }],
-        objectif: [{ validator: validateRequire }],
-        rechercheBeneficeIndividuel: [{ validator: validateRequire }],
-        phaseExperimentationClinique: [{ validator: validateRequire }],
-        essai: [{ validator: validateRequire, trigger: 'blur' }],
-        etudeBioequivalence: [{ validator: validateRequire }],
-        datePrevuDebut: Date.now(),
+        titre: [{  required: true, trigger: 'blur',validator: validateRequire }],
+        objectif: [{ required: true, trigger: 'blur', validator: validateRequire }],
+        rechercheBeneficeIndividuel: [{ required: true, trigger: 'blur', validator: validateRequire }],
+        phaseExperimentationClinique: [{ required: true, trigger: 'blur', validator: validateRequire }],
+        essai: [{ }],
+        etudeObservationnelle : [{ }],
+        etudeBioequivalence: [{ }],
+        datePrevuDebut: [{ required: true, trigger: 'blur'}],
         dureePrevue: 0,
         fullname: [{ validator: validateRequire }],
         qualite: [{ validator: validateRequire }],
@@ -535,10 +613,12 @@ export default {
         produitFabrication: [{ validator: validateRequire }],
         placeboPharmaceutique: [{ validator: validateRequire }],
         placeboFabricant: [{ validator: validateRequire }],
-        personPrevu: 0,
-        personTherapeutique: [{ validator: validateRequire }],
-        personCriteres: [{ validator: validateRequire }],
-        personDuree: 0,
+        personne: {
+          prevu: [{required: true, trigger: 'blur', }],
+          therapeutique: [{required: true, trigger: 'blur', validator: validateRequire}],
+          criteres: [{ validator: validateRequire }],
+          duree: [{ required: true, trigger: 'blur',}]
+        },
         comiteInfo: [{ validator: validateRequire }]
       },
       tempRoute: {}
@@ -613,7 +693,13 @@ export default {
       const data = { ...this.postForm, ...this.$store.state.files }
       console.log(data)
       this.$refs.postForm.validate(valid => {
-        if (valid) {
+        if ( this.postForm.investigateur === [] && this.postForm.investigateurFile === ''){
+          this.$notify({
+            message: 'le cahmp investigateur est vide!',
+            type: 'warning'
+          })
+        }
+        else if (valid) {
           this.loading = true
           this.$store.dispatch('essais/createEssai', data).then(() => {
             this.$notify({
@@ -645,6 +731,38 @@ export default {
           return false
         }
       })
+    },
+    beforeUpload(file) {
+      const isJPG = file.type === 'application/pdf'
+      const isLt2M = file.size / 1024 / 1024 < 5
+      console.log(this.myHeaders)
+      if (!isJPG) {
+        this.$message.error('les fichies pdf uniquement!')
+      }
+      if (!isLt2M) {
+        this.$message.error('la taile de fichier est sup de 2MB!')
+      }
+      return isJPG && isLt2M
+    },
+    handelSuccess(repons, file) {
+      //this.$store.dispatch(`files/${this.$props.commit}`, repons.url)
+      this.postForm.investigateurFile = repons.url;
+      this.fileList.push(file)
+    },
+    handelError(err, file) {
+      console.log(err)
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList)
+    },
+    handlePreview(file) {
+      console.log(file)
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`un seul fichier uniquement`)
+    },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`Annuler la transformation de ${file.name} ?`)
     }
   }
 }
