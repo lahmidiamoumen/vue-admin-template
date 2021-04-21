@@ -329,9 +329,28 @@
           <el-form-item label="Comité (nom et adresse)" >
             <el-input v-model.lazy="postForm.commite.info" placeholder="Aa..." />
           </el-form-item>
+          <el-form-item label="Avis "   size="small">
+              <el-radio-group v-model.lazy="postForm.commite.avis">
+                <el-radio :label="'favorable'" border size="mini">Favorable</el-radio>
+                <el-radio :label="'défavorable'" border size="mini">Défavorable</el-radio>
+              </el-radio-group>
+            </el-form-item>
           <el-form-item label="Date de l'avis" >
             <el-date-picker v-model.lazy="displayComiteDate" type="date" format="yyyy-MM-dd"  placeholder="Selectionnez la dete" />
           </el-form-item>
+        </el-card>
+        <br>
+        <br>
+        <el-card shadow="hover" class="app-container" :body-style="{ padding: '0px', paddingRight: '60px'}">
+          <p class="headon">ASSURANCE</p>
+          <br>
+          <el-form-item label="Entreprise d'assurance (nom ou dénomination) " >
+            <el-input v-model.lazy="postForm.assurance.denomination" placeholder="Aa..." />
+          </el-form-item>
+          <el-form-item label="Numéro du contrat souscrit" >
+            <el-input v-model.lazy="postForm.assurance.numero" placeholder="Aa..." />
+          </el-form-item>
+          
         </el-card>
         <br>
         <el-card shadow="never" class="app-container" :body-style="{ padding: '5px'}">
@@ -370,7 +389,7 @@
 
     <el-dialog title="MEDICAMENT OU PRODUIT ETUDIE" :visible.sync="dialogFormVisible" width="900px">
       <el-form ref="dataForm" :rules="rules" :model="postMedicamentEtude" label-position="right" label-width="270px" style="padding: 0px 10px">
-          <el-form-item label="Dénomination spéciale" required prop="medicamentDenomination">
+          <el-form-item label="Dénomination spéciale" >
             <el-input v-model.lazy="postMedicamentEtude.denominationSpeciale"  />
           </el-form-item>
         
@@ -381,7 +400,7 @@
             <el-input v-model.lazy="postMedicamentEtude.DCI" />
           </el-form-item>
 
-          <el-form-item label="Composition qualitative et quantitative" prop="medicamentDenomination">
+          <el-form-item label="Composition qualitative et quantitative" >
             <el-input v-model.lazy="postMedicamentEtude.compositionQualitativeQuantitative" />
           </el-form-item>
 
@@ -434,6 +453,8 @@
 import BackToTop from '@/components/BackToTop'
 import MDinput from '@/components/MDinput'
 import ElDragSelect from '@/components/DragSelect' // base on element-ui
+import router from '@/router';
+import { mapGetters } from 'vuex'
 
 
 const investigateur= {
@@ -497,7 +518,12 @@ const defaultForm = {
   },
   commite: {
     info: '',
-    date: ''
+    date: '',
+    avis: undefined
+  },
+  assurance: {
+    denomination: '',
+    numero: ''
   },
   status: ''
 }
@@ -556,12 +582,7 @@ const optionEssai = [{
 export default {
   name: 'ArticleDetail',
   components: { MDinput, BackToTop, ElDragSelect },
-  props: {
-    isEdit: {
-      type: Boolean,
-      default: false
-    }
-  },
+  
   data() {
     const validateRequire = (rule, value, callback) => {
       if (value === '') {
@@ -625,6 +646,20 @@ export default {
     }
   },
   computed: {
+     ...mapGetters([
+      'declarationAssurance',
+      'lettreMandat',
+      'avisFavorableComiteEthique',
+      'synopsisProtocole',
+      'protocoleFinal',
+      'crf',
+      'rcp',
+      'ficheInformationPatient',
+      'modeleFinancier',
+      'autorisation',
+      'paiement',
+      'approbations'
+    ]),
     displayTime: {
       get() {
         return (+new Date(this.postForm.datePrevuDebut))
@@ -691,9 +726,24 @@ export default {
     },
     submitForm() {
       const data = { ...this.postForm, ...this.$store.state.files }
-      console.log(data)
       this.$refs.postForm.validate(valid => {
-        if ( this.postForm.investigateur === [] && this.postForm.investigateurFile === ''){
+       if (this.declarationAssurance === '' ||
+                this.lettreMandat === '' ||
+                //this.avisFavorableComiteEthique !== '' ||
+                this.synopsisProtocole === '' ||
+                this.protocoleFinal === '' ||
+                this.crf === '' ||
+                this.rcp === '' ||
+                this.ficheInformationPatient === '' ||
+                //this.modeleFinancier === '' ||
+                this.autorisation === '' ||
+                this.paiement === '' || this.approbations === ''){
+          this.$notify({
+            message: 'Télécharger tout les fichiers obligatoires d\'abord',
+            type: 'warning'
+          })
+        }
+        else  if ( this.postForm.investigateur === [] && this.postForm.investigateurFile === ''){
           this.$notify({
             message: 'le cahmp investigateur est vide!',
             type: 'warning'
@@ -702,12 +752,13 @@ export default {
         else if (valid) {
           this.loading = true
           this.$store.dispatch('essais/createEssai', data).then(() => {
-            this.$notify({
-              title: 'published',
-              message: 'success',
-              type: 'success',
-              duration: 2000
-            })
+            // this.$notify({
+            //   title: 'published',
+            //   message: 'success',
+            //   type: 'success',
+            //   duration: 2000
+            // })
+            router.push('/essai-liste/soumisstion');
             this.loading = false
           }).catch((err) => {
             console.log(err)

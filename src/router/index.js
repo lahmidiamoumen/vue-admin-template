@@ -37,9 +37,9 @@ export const asyncRoutes = [
   {
     path: '/essai-liste',
     component: Layout,
-    name: 'Example',
+    name: 'Essai',
     meta: {
-      title: 'Example',
+      title: "Constitution d'un dossier",
       icon: 'el-icon-s-help'
     },
     children: [
@@ -47,7 +47,7 @@ export const asyncRoutes = [
         path: 'create',
         component: () => import('@/views/essai/create'),
         name: 'CreateArticle',
-        meta: { title: 'Creer un essai clinique(2)', icon: 'edit', breadcrumb: false, activeMenu: '/essai/index', roles: ['promo'] },
+        meta: { title: 'Creer un essai clinique (Annexe B)', icon: 'edit', breadcrumb: false, activeMenu: '/essai/index', roles: ['promo'] },
         hidden: true
       },
       {
@@ -60,8 +60,15 @@ export const asyncRoutes = [
       {
         path: 'list',
         component: () => import('@/views/essai/list'),
-        name: 'Essais cliniques',
+        name: 'liste des essais cliniques',
         meta: { title: 'Essais cliniques', icon: 'nested' }
+      },
+      {
+        path: 'soumisstion',
+        component: () => import('@/views/essai/show'),
+        name: 'Essais cliniques',
+        meta: { title: 'Soumission du dossier', icon: 'nested', activeMenu: '/essai/index', roles: ['promo']  },
+        hidden: true
       }
     ]
   },

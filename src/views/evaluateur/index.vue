@@ -36,7 +36,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="100px" align="center" label="Créé a">
+      <el-table-column width="180px" align="center" label="Créé a">
         <template slot-scope="scope">
           <i class="el-icon-time" />
           <span>{{ ` ${timeSince(scope.row.createdAt)}` }}</span>
@@ -51,11 +51,11 @@
 
        <el-table-column min-width="120px" label="Actif">
         <template slot-scope="{ row }">
-          <span>{{ row.actif }}</span>
+          <span>{{ row.actif ? 'Oui' : 'Non' }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="Status de compte" width="120">
+      <el-table-column align="center" label="Des / Act" width="120">
         <template slot-scope="{ row }">
           <el-button
             v-if="row.actif"

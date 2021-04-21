@@ -63,7 +63,6 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
         const token = 'Bearer ' + response.data.token
-        console.log(response.data)
         commit('SET_ID', response.data.userId)
         if(!response.data.emailVerified ) {
           reject("email not verified")
@@ -85,7 +84,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const data = response.data
-        console.log({getInfo:data})
+        //console.log({getInfo:data})
 
         if (!data) {
           reject('Verification failed, please Login again.')
@@ -97,7 +96,6 @@ const actions = {
         if (!grade) {
           reject('getInfo: roles must be a non-null array!')
         }
-        console.log(nom)
 
         commit('SET_ID', _id)
         commit('SET_NAME', nom)

@@ -54,6 +54,7 @@ export default {
   @import "~@/styles/mixin.scss";
   @import "~@/styles/variables.scss";
 
+
   .app-wrapper {
     @include clearfix;
     position: relative;

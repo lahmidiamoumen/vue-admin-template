@@ -32,7 +32,7 @@
                 </dd>
               </dl>
         </div>
-        <el-link type="primary" :href="`http://localhost:8080/${doc.value}`">Voire document</el-link>
+        <el-link type="primary" target="_blank" :href="`/${doc.value}`">Voire document</el-link>
         <div v-if="doc.status !== 'aprouve' && isEval" style="float: right">
           <el-button type="danger" size="mini" @click="showDialog = true">
             {{doc.hasRemark ? 'Modifier' : 'Ajouter'}} remarques

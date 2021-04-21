@@ -1,22 +1,29 @@
 <template>
   <div class="dashboard-editor-container">
     <el-card shadow="never" :body-style="{ padding: '20px',borderRadius: '4px' }">
-      <dl>
-        <dt><strong>Date de creation</strong></dt>
-        <dd>{{ date(postForm.createdAt)}}</dd>
-      </dl>
-      <dl>
-        <dt><strong>Cree par</strong></dt>
-        <dd>{{ postForm.createdBy.nom}} {{ postForm.createdBy.prenom}}</dd>
-      </dl>
-       <dl>
-        <dt><strong>Objectif</strong></dt>
-        <dd>{{ postForm.objectif}}</dd>
-      </dl>
-       <dl>
-        <dt><strong>Titre</strong></dt>
-        <dd>{{ postForm.titre}}</dd>
-      </dl>
+
+      <table class="balance">
+				<tr>
+					<th><span contenteditable>Référence:</span></th>
+					<td><span>{{ postForm.id | getId }} </span></td>
+				</tr>
+        <tr>
+					<th><span contenteditable>Date de constitution:</span></th>
+					<td><span>{{ date(postForm.createdAt)}}</span></td>
+				</tr>
+				<tr>
+					<th><span contenteditable>Promoteur:</span></th>
+					<td><span contenteditable>{{ postForm.createdBy.nom}} {{ postForm.createdBy.prenom}}</span></td>
+				</tr>
+				<tr>
+					<th><span contenteditable>Objectif:</span></th>
+					<td><span>{{ postForm.objectif}}</span></td>
+				</tr>
+        <tr>
+					<th><span contenteditable>Titre:</span></th>
+					<td><span>{{ postForm.titre}}</span></td>
+				</tr>
+			</table>
       <!-- card body -->
     </el-card>
     
@@ -31,52 +38,48 @@
                   <div slot="header">
                     <span>Essai</span>
                   </div>
-                <el-form-item style="margin-bottom: 40px;" prop="titre">
-                  <MDinput :value="postForm.titre" disabled :maxlength="100" style="width: 90%;" >
-                    Titre de l'essai
-                  </MDinput>
-                </el-form-item>
 
-                <el-form-item label="Objectif"  prop="objectif" label-width="360px">
-                  <el-input :value="postForm.objectif" disabled type="textarea" style="width: 90%;color: #333" />
-                </el-form-item>
+                <dl class="table-display">
+                  <dt>Titre de l'essai</dt>
+                  <dd>{{postForm.titre}}</dd>
+                  <dt>Objectif</dt>
+                  <dd>{{postForm.objectif}}</dd>
+                  <dt>Recherche avec bénéfice individuel direct</dt>
+                  <dd>{{postForm.rechercheBeneficeIndividuel ? 'Oui' : 'Non'}}</dd>
+                  <dt>Phase d'expérimentation clinique</dt>
+                  <dd>{{postForm.phaseExperimentationClinique}}</dd>
+                </dl>
+                <dl class="table-display">
+                  <dt>Essai</dt>
+                  <dd>
+                    <ul>
+                      <li v-for="(item, index) in postForm.essai" :key="index">
+                        {{item}}
+                      </li>
+                    </ul>
+                  </dd>  
+                  <dt>Etude de bioéquivalence</dt>
+                  <dd>{{postForm.etudeBioequivalence}}</dd>
+                  <dt>Etude Observationnelle</dt>
+                  <dd>
+                    <ul>
+                      <li v-for="(item, index) in Array.isArray(postForm.etudeObservationnelle) ? postForm.etudeObservationnelle : [postForm.etudeObservationnelle]" :key="index">
+                        {{item}}
+                      </li>
+                    </ul>
+                  </dd>  
+                  <dt>Date prévue pour le début de la recherche</dt>
+                  <dd>
+                      <el-date-picker :value="displayTime" size="small" :editable="false" type="date" format="yyyy-MM-dd" style="width: 200px;"/>
+                  </dd>
+                  <dt>Durée prévue</dt>
+                  <dd>{{postForm.dureePrevuDebut}}</dd>
+                </dl>
 
-                <el-form-item label="Recherche avec bénéfice individuel direct :"  prop="rechercheBeneficeIndividuel" label-width="360px" size="small">
-                  <el-radio-group  :value="postForm.rechercheBeneficeIndividuel">
-                    <el-radio :label="postForm.rechercheBeneficeIndividuel" border size="mini">{{ postForm.rechercheBeneficeIndividuel ? 'Oui' : 'Non'}}</el-radio>
-                  </el-radio-group>
-                </el-form-item>
-
-                <el-form-item label="Phase d'expérimentation clinique :" label-width="360px"  prop="phaseExperimentationClinique" size="small">
-                  <el-radio-group  :value="postForm.phaseExperimentationClinique">
-                    <el-radio :label="postForm.phaseExperimentationClinique" border size="mini" />
-                  </el-radio-group>
-                </el-form-item>
-
-                  <el-form-item label="Essai:"  label-width="360px" >
-                    <el-input :value="postForm.essai" disabled placeholder="Select" style="width: 90%;"/>
-                  </el-form-item>
-                
-                  <el-form-item label="Etude de bioéquivalence" label-width="360px" >
-                    <el-input :value="postForm.etudeBioequivalence" disabled style="width: 90%;"/>
-                  </el-form-item>
-                  <el-form-item label="Etude Observationnelle:" label-width="360px" >
-                    <el-input :value="postForm.etudeObservationnelle" disabled style="width: 90%;"/>
-                  </el-form-item>
-                  <el-row>
-                    <el-col :span="8" :offset="4">
-                      <el-form-item label="Date prévue pour le début de la recherche" >
-                        <el-date-picker :value="displayTime" disabled type="date" format="yyyy-MM-dd" style="width: 90%;" placeholder="Select date and time" />
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="4">
-                      <el-form-item label="Durée prévue">
-                        <el-input-number :value="postForm.dureePrevuDebut" disabled :min="0" size="medium" />
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-
-            <br>
+               
+               
+            <p style="clear: left;">- </p>
+            <el-divider  content-position="left">MEDICAMENT OU PRODUIT ÉTUDIÉ</el-divider>
             <el-table :data="postForm.medicamentEtudie" align="center" style="width: 100%">
             <el-table-column label="Dénomination spéciale" width="200px" align="center">
               <template slot-scope="{row}">
@@ -88,7 +91,7 @@
                   <span>{{ row.nomDeCode }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="Dénomination scientifique/D.C.I" width="200px" align="center">
+            <el-table-column label="Dénomination scientifique/D.C.I" width="250px" align="center">
               <template slot-scope="{row}">
                   <span>{{ row.DCI }}</span>
               </template>
@@ -128,41 +131,39 @@
             <br>
             <el-divider content-position="left">MEDICAMENT OU PRODUIT DE REFERENCE</el-divider>
             <br>
-              <el-form-item label="Dénomination spéciale" label-width="360px">
-                <el-input :value="postForm.medicamentReference.denominationSpeciale" disabled />
-              </el-form-item>
+            <dl class="table-display">
+              <dt>Dénomination spéciale</dt>
+              <dd>{{postForm.medicamentReference.denominationSpeciale}}</dd>
 
-              <el-form-item label="Dénomination scientifique et DCI du (des) principe(s) actif(s)" label-width="360px">
-                <el-input :value="postForm.medicamentReference.DCI" style="width:60%" disabled />
-              </el-form-item>
+              <dt>Dénomination scientifique et DCI du (des) principe(s) actif(s)</dt>
+              <dd>{{postForm.medicamentReference.DCI}}</dd>
 
-              <el-form-item label="Forme pharmaceutique" label-width="360px">
-                <el-input disabled :value="postForm.medicamentReference.formePharmaceutique" placeholder="pharmacopée" style="width:60%" />
-              </el-form-item>
+              <dt>Forme pharmaceutique</dt>
+              <dd>{{postForm.medicamentReference.formePharmaceutique}}</dd>
+            </dl>
 
-              <el-form-item label="Composition qualitative et quantitative en principe actifs" label-width="360px">
-                <el-input disabled :value="postForm.medicamentReference.compositionQualitativeQuantitative" placeholder="en utilisants les dénominations communes internationales" style="width:60%" />
-              </el-form-item>
+            <dl class="table-display">
+              <dt>Composition qualitative et quantitative en principe actifs</dt>
+              <dd>{{postForm.medicamentReference.compositionQualitativeQuantitative}}</dd>
 
-              <el-form-item label="Posologie  " label-width="360px" >
-                <el-input disabled :value="postForm.medicamentReference.posologie" style="width:60%" />
-              </el-form-item>
+              <dt>Posologie</dt>
+              <dd>{{postForm.medicamentReference.posologie}}</dd>
 
-              <el-form-item label="Fabricant(s)" label-width="360px">
-                <el-input disabled :value="postForm.medicamentReference.fabricant" placeholder="nom(s) ou dénomination(s) et lieu(x) de fabrication" style="width:60%" />
-              </el-form-item>
-
+              <dt>Fabricant(s)</dt>
+              <dd>{{postForm.medicamentReference.fabricant}}</dd>
+            </dl>
             <br>
-            <el-divider content-position="left">INVESTIGATEUR(S)</el-divider>
             <br>
-              <el-link v-if="postForm.investigateurFile" type="primary" :href="`http://localhost:8080/${postForm.investigateurFile}`">Fichier des investigateur</el-link>
+            <p style="clear: left;">- </p>
+            <el-divider  content-position="left">INVESTIGATEUR(S)</el-divider>
+              <el-link v-if="postForm.investigateurFile" type="primary" target="_blank" :href="`/${postForm.investigateurFile}`">Fichier des investigateur</el-link>
               <el-table :data="postForm.investigateur" align="center" style="width: 100%">
                 <el-table-column label="Nom(s) et Prénom(s)" width="220px" align="center">
                   <template slot-scope="{row}">
                       <span>{{ row.fullname }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column label="Qualité" width="220px" align="center">
+                <el-table-column label="Qualité" width="220px"  align="center">
                   <template slot-scope="{row}">
                       <span>{{ row.qualite }}</span>
                   </template>
@@ -174,43 +175,48 @@
                 </el-table-column>
               </el-table>  
             <br>
-            <el-divider content-position="left">PLACEBO</el-divider>
-              <el-form-item label="Forme pharmaceutique" label-width="360px">
-                <el-input disabled :value="postForm.placebo.formePharmaceutique" placeholder="pharmacopée" style="width:60%" />
-              </el-form-item>
+            <dl class="table-display">
+                <el-divider content-position="left">PLACEBO</el-divider>
+                <dt>Forme pharmaceutique</dt>
+                <dd>{{postForm.placebo.formePharmaceutique}}</dd>
+                <dt>Fabricant(s) nom(s) ou dénomination(s) et lieu(x) de fabrication</dt>
+                <dd>{{postForm.placebo.fabricant}}</dd>
+            </dl>    
+            <dl class="table-display">
+              <el-divider content-position="left">PERSONNES SE PRETANT A LA RECHERCHE</el-divider>
+                <dt>Nombre prévu de personnes</dt>
+                <dd>{{postForm.personne.prevu}}</dd>
+                <dt>Indication thérapeutique</dt>
+                <dd>{{postForm.personne.therapeutique}}</dd>
+                <dt>Principaux critères d'inclusion</dt>
+                <dd>{{postForm.personne.criteres}}</dd>
+                <dt>Durée du traitement ou de la participation par personne</dt>
+                <dd>{{postForm.personne.duree}}</dd>
+            </dl>
+            
+            <p style="clear: left;">- </p>
 
-              <el-form-item label="Fabricant(s)" label-width="360px">
-                <el-input disabled :value="postForm.placebo.fabricant" placeholder="nom(s) ou dénomination(s) et lieu(x) de fabrication" style="width:60%" />
-              </el-form-item>
-
-            <br>
-            <el-divider content-position="left">PERSONNES SE PRETANT A LA RECHERCHE</el-divider>
-            <br>
-
-              <el-form-item label="Nombre prévu de personnes" label-width="360px">
-                <el-input-number :value="postForm.personne.prevu" disabled :min="0" size="medium" placeholder="Aa..." style="width:60%" />
-              </el-form-item>
-
-              <el-form-item label="Indication thérapeutique" label-width="360px">
-                <el-input disabled :value="postForm.personne.therapeutique" placeholder="Aa..." style="width:60%" />
-              </el-form-item>
-
-              <el-form-item label="Principaux critères d'inclusion" label-width="360px">
-                <el-input disabled :value="postForm.personne.criteres" placeholder="Aa..." style="width:60%" />
-              </el-form-item>
-
-              <el-form-item label="Durée du traitement ou de la participation par personne" label-width="360px">
-                <el-input-number :value="postForm.personne.duree" :min="0" disabled size="medium" placeholder="Aa..." style="width:60%" />
-              </el-form-item>
             <el-divider content-position="left">COMITE D'ETHIQUE</el-divider>
+            <dl class="table-display">     
+                <dt>Comité (nom et adresse)</dt>
+                <dd>{{postForm.commite.info}}</dd>
+                <dt>Avis</dt>
+                <dd>{{postForm.commite.avis}}</dd>
+                <dt>Date de l'avis</dt>
+                <dd>
+                  <el-date-picker size="small" :value="displayComiteDate" :editable="false" type="date" format="yyyy-MM-dd" style="width: 200px;"/>
+                </dd>
+            </dl>
             <br>
-              <el-form-item label="Comité (nom et adresse)" label-width="360px">
-                <el-input disabled :value="postForm.commite.info" placeholder="Aa..." style="width:60%" />
-              </el-form-item>
-              <el-form-item label="Date de l'avis" label-width="360px">
-                <el-date-picker :value="displayComiteDate" disabled type="date" format="yyyy-MM-dd" style="width:60%" placeholder="Select date and time" />
-              </el-form-item>
-            <br> 
+            <p style="clear: left;">- </p>
+
+            <el-divider content-position="left">ASSURANCE</el-divider>
+            <dl class="table-display">     
+                <dt>Entreprise d'assurance (nom ou dénomination)</dt>
+                <dd>{{ postForm.assurance ? postForm.assurance.denomination : 'Vide'}}</dd>
+                <dt>Numéro du contrat souscrit</dt>
+                <dd>{{ postForm.assurance ? postForm.assurance.numero : 'Vide'}}</dd>
+            </dl>     
           </el-card>
           </div>
         </el-form>
@@ -311,9 +317,14 @@ const defaultForm = {
   createdAt: '',
   createdBy: '',
   evaluatedBy: undefined,
-  commite: {
+   commite: {
     info: '',
-    date: ''
+    date: '',
+    avis: undefined
+  },
+  assurance: {
+    denomination: '',
+    numero: ''
   },
   status: ''
 }
@@ -322,6 +333,11 @@ const defaultForm = {
 export default {
   name: 'ArticleDetail',
   components: { MDinput, BackToTop, FileUploaderEdit },
+  filters: {
+    getId(id){
+      return id ? 'EC_' +  String(id).padStart(6, '0') : 'EC_000000';
+    }
+  },
   data() {
     return {
       postForm: Object.assign({}, defaultForm)
@@ -416,6 +432,50 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+/* content editable */
+
+table.meta, table.balance { width: 70%;margin: 0 auto; }
+th { width: 350px;}
+td {font-size: 15px;}
+table.balance th { text-align: right; }
+
+table { font-size: 75%; table-layout: fixed; width: 100%; }
+table { border-collapse: separate; border-spacing: 2px; }
+th, td { border-width: 1px; padding: 0.4em; position: relative; text-align: left; }
+th, td { border-radius: 0.25em; border-style: solid; }
+th { background: rgb(229, 235, 247); border-color: #BBB; margin-right: 8px; }
+td { border-color: #DDD; }
+
+// th { background: rgb(229, 235, 247); border-color: #e4e7ed; }
+// td { border-color: #e4e7ed; }
+
+dl.table-display {
+	float: left;
+	width: 650px;
+	margin: 1em 1em;
+	padding: 0;
+	border-bottom: 1px solid #999;
+}
+
+.table-display dt {
+	clear: left;
+	float: left;
+	width: 200px;
+	margin: 0px;
+	padding: 5px;
+	border-top: 1px solid #999;
+	font-weight: bold;
+}
+
+.table-display dd {
+	float: left;
+	width: 450px;
+	margin: 0;
+	padding: 5px;
+	border-top: 1px solid #999;
+}
+
 .el-upload__tip {
   color: #a3a5a9;
   margin-top: 2px;
@@ -479,23 +539,5 @@ export default {
     }
   }
 }
-dl {
-  display: flex;
-  flex-flow: row wrap;
-}
-dt {
-  flex-basis: 20%;
-  padding: 8px;
-  font-size: 14px;
-  color: #333;
-  background: #f9f9f9;
-  text-align: right;
-}
-dd {
-  flex-basis: 70%;
-  flex-grow: 1;
-  margin: 0;
-  padding: 8px;
-  border-bottom: 0.1px solid #f1f1f1;
-}
+
 </style>

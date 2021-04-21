@@ -1,19 +1,24 @@
 <template>
   <div class="app-container">
     <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column align="center" label="Essai" width="180px">
-        <template slot-scope="scope">
-          <span>{{ scope.row.essai }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="300px" align="center" label="Titre">
+      <el-table-column min-width="30px" label="Ref">
         <template slot-scope="{row}">
           <router-link :to="'/essai-liste/edit/'+row._id" class="link-type">
-            <span>{{ row.titre }}</span>
+            <span>{{ row.id | getId }}</span>
           </router-link>
         </template>
       </el-table-column>
-      <el-table-column width="200px" align="center" label="Date">
+      <!-- <el-table-column align="center" label="Essai" width="180px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.essai }}</span>
+        </template>
+      </el-table-column> -->
+      <el-table-column width="300px" label="Titre">
+        <template slot-scope="{row}">
+            <span>{{ row.titre }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column width="150px" align="center" label="Date">
         <template slot-scope="scope">
           <i class="el-icon-time" />
           <span>{{ ` ${timeSince(scope.row.createdAt)}`}}</span>
@@ -23,9 +28,7 @@
 
       <el-table-column min-width="120px" label="Objectif">
         <template slot-scope="{row}">
-          <router-link :to="'/essai-liste/edit/'+row._id" class="link-type">
-            <span>{{ row.objectif }}</span>
-          </router-link>
+          <span>{{ row.objectif }}</span>
         </template>
       </el-table-column>
 
@@ -35,9 +38,9 @@
         </template>
       </el-table-column>
 
-      <el-table-column class-name="status-col" label="Status" width="130">
+      <el-table-column class-name="status-col" label="Status" width="135px">
         <template slot-scope="{row}">
-          <el-tag :type="row.status | statusFilter">
+          <el-tag style="width: 100%" :type="row.status | statusFilter">
             {{ row.status | statusMessage }}
           </el-tag>
         </template>
@@ -46,7 +49,7 @@
       <el-table-column align="center" label="Actions" width="180" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <router-link :to="'/essai-liste/edit/'+row._id">
-            <el-button type="primary" size="mini">
+            <el-button :style=" notProm && notValid && !row.evaluatedBy ? '' : 'width: 100%' " type="primary" size="mini">
               Consulter
             </el-button>
           </router-link>
@@ -84,6 +87,9 @@ export default {
     }
   },
   filters: {
+    getId(id){
+      return id ? 'EC_' +  String(id).padStart(6, '0') : 'EC_000000';
+    },
     statusFilter(status) {
       const statusMap = {
         valide: 'success',
