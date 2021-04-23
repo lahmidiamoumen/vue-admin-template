@@ -28,9 +28,9 @@ export const asyncRoutes = [
     children: [
       {
         path: 'dashboard',
-        name: 'Dashboard',
+        name: 'Tableau',
         component: () => import('@/views/dashboard/index'),
-        meta: { title: 'Dashboard',  icon: 'dashboard' }
+        meta: { title: 'Tableau de bord',  icon: 'dashboard' }
       }
   ]
   },
@@ -46,15 +46,15 @@ export const asyncRoutes = [
       {
         path: 'create',
         component: () => import('@/views/essai/create'),
-        name: 'CreateArticle',
-        meta: { title: 'Creer un essai clinique (Annexe B)', icon: 'edit', breadcrumb: false, activeMenu: '/essai/index', roles: ['promo'] },
+        name: 'ConstruireAnnexB',
+        meta: { title: 'Créer  un essai clinique (Annexe B)', icon: 'edit', breadcrumb: false, activeMenu: '/essai/index', roles: ['promo'] },
         hidden: true
       },
       {
         path: 'edit/:id(\\w+)',
         component: () => import('@/views/essai/edit'),
-        name: 'EditArticle',
-        meta: { title: 'List des ', noCache: true, activeMenu: '/essai-liste/list' },
+        name: 'Consulter',
+        meta: { title: 'Consulter', noCache: true, activeMenu: '/essai-liste/list' },
         hidden: true
       },
       {
@@ -85,8 +85,8 @@ export const asyncRoutes = [
       {
         path: 'index',
         component: () => import('@/views/essai/index'),
-        name: 'Creer un essai clinique',
-        meta: { title: 'Creer un essai clinique', icon: 'form' }
+        name: 'Créer un essai clinique',
+        meta: { title: 'Créer un essai clinique', icon: 'form' }
       }
     ]
   },
@@ -114,9 +114,9 @@ export const asyncRoutes = [
     children: [
       {
         path: 'index',
-        name: 'Evalueteur',
+        name: 'Evalueteurs',
         component: () => import('@/views/evaluateur/index'),
-        meta: { title: 'Evalueteur', icon: 'form' }
+        meta: { title: 'Evaluateurs', icon: 'form' }
       }
     ]
   },

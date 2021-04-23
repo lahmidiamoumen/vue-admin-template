@@ -22,7 +22,7 @@
       >
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">Déposez le fichier ici ou <em>cliquez pour télécharger</em></div>
-        <div slot="tip" class="el-upload__tip"> pdf fichies moins de 5mb</div>
+        <div slot="tip" class="el-upload__tip"> pdf fichier moins de 5mb</div>
       </el-upload>
     </el-card>
   </div>

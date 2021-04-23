@@ -32,7 +32,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column v-if="notProm" min-width="120px" label="Pormoteur">
+      <el-table-column v-if="notProm" width="210px" label="Pormoteur">
         <template slot-scope="{row}">
             <span>{{ `${row.createdBy.nom} ${row.createdBy.prenom}` }}</span>
         </template>
@@ -54,7 +54,7 @@
             </el-button>
           </router-link>
           <el-button v-if="notProm && notValid && !row.evaluatedBy" size="mini" type="success" style="margin-left:5px" @click="handleModifyStatus(row)">
-              S'occuper
+              S'occuper 
             </el-button>
         </template>
       </el-table-column>
@@ -154,7 +154,7 @@ export default {
       })
     },
     timeSince(date) {
-      return new Date(date).toDateString()
+      return new Date(date).toLocaleDateString("fr-FR",  {year: 'numeric', month: 'long', day: 'numeric' })
     }
   }
 }

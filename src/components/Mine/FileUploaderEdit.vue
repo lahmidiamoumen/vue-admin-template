@@ -27,7 +27,7 @@
                     ref="upload">
                       <el-button slot="trigger" size="small" type="primary">Choisissez un fichie</el-button>
                       <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="null">soumettre</el-button> -->
-                      <div slot="tip" class="el-upload__tip">pdf uniqument moins de 2mb</div>
+                      <div slot="tip" class="el-upload__tip">pdf moins de 5mb</div>
                   </el-upload>
                 </dd>
               </dl>

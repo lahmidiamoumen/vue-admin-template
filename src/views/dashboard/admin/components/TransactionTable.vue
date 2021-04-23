@@ -133,7 +133,7 @@ export default {
       })
     },
     timeSince(date) {
-      return new Date(date).toDateString()
+      return new Date(date).toLocaleDateString("fr-FR",  {year: 'numeric', month: 'long', day: 'numeric' })
     }
   }
 }

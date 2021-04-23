@@ -43,7 +43,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column min-width="120px" label="Username">
+      <el-table-column min-width="150px" label="Nom d’utilisateur">
         <template slot-scope="{ row }">
           <span>{{ row.userName }}</span>
         </template>
@@ -105,10 +105,10 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
-          Cancel
+          Annuler
         </el-button>
         <el-button type="primary" @click="createData()">
-          Confirm
+          Ajouter
         </el-button>
       </div>
     </el-dialog>
@@ -224,7 +224,7 @@ export default {
       })
     },
     timeSince(date) {
-      return new Date(date).toDateString()
+      return new Date(date).toLocaleDateString("fr-FR",  {year: 'numeric', month: 'long', day: 'numeric' })
     }
   }
 }

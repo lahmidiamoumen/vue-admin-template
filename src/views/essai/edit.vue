@@ -30,7 +30,7 @@
     <el-collapse :accordion="false" >
       <el-collapse-item>
         <template slot="title">
-          <span style="font-size: 20px; padding: 0 17px">Annex B</span>
+          <span style="font-size: 20px; padding: 0 17px">Annexe B</span>
         </template>
          <el-form ref="postForm" :model="postForm"  class="form-container">
           <div style="padding: 20px 70px">
@@ -349,7 +349,8 @@ export default {
   },
   methods: {
     date(date) {
-      return new Date(date).toUTCString()
+      //return new Date(date).toLocaleDateString("fr-FR",  {year: 'numeric', month: 'long', day: 'numeric' })
+      return new Intl.DateTimeFormat('fr-FR', { dateStyle: 'full', timeStyle: 'long' }).format(new Date(date))
     },
     fetchEssai(id) {
       fetchArticle(id).then(response => {

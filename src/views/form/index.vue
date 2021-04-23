@@ -13,29 +13,29 @@
       highlight-current-row
       style="width: 100%"
     >
-      <el-table-column align="center" label="Nom" width="160px">
+      <el-table-column label="Nom" width="160px">
         <template slot-scope="scope">
           <span>{{ scope.row.nom }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="Prenom">
+      <el-table-column width="150px" label="Prenom">
         <template slot-scope="{ row }">
           <span>{{ row.prenom }}</span>
         </template>
       </el-table-column>
-      <el-table-column min-width="120px" label="Telephon">
+      <el-table-column min-width="120px" label="Téléphone">
         <template slot-scope="{ row }">
           <span>{{ row.telephone }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column min-width="240px" label="Email">
+      <el-table-column min-width="200px" label="Email">
         <template slot-scope="{ row }">
           <span>{{ row.email }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="100px" align="center" label="Créé a">
+      <el-table-column width="130px" label="Créé a">
         <template slot-scope="scope">
           <i class="el-icon-time" />
           <span>{{ timeSince(scope.row.createdAt) }}</span>
@@ -48,21 +48,15 @@
         </template>
       </el-table-column>
 
-      <el-table-column min-width="120px" label="Objectif">
+      <!-- <el-table-column min-width="120px" label="Objectif">
         <template slot-scope="{ row }">
           <span>{{ row.etablissement }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column min-width="120px" label="Adresse">
         <template slot-scope="{ row }">
           <span>{{ row.adresse }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column min-width="120px" label="Grade">
-        <template slot-scope="{ row }">
-          <span>{{ row.grade }}</span>
         </template>
       </el-table-column>
 
@@ -72,13 +66,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column min-width="120px" label="Username">
+      <el-table-column min-width="150px" label="Nom d’utilisateur">
         <template slot-scope="{ row }">
           <span>{{ row.userName }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="Status de compte" width="120">
+      <el-table-column align="center" label="Status du compte" width="120">
         <template slot-scope="{ row }">
           <el-button
             v-if="row.actif"
@@ -165,7 +159,7 @@ export default {
       })
     },
     timeSince(date) {
-      return new Date(date).toLocaleString().split(', ')[0]
+      return new Date(date).toLocaleDateString("fr-FR",  {year: 'numeric', month: 'long', day: 'numeric' })
     }
   }
 }

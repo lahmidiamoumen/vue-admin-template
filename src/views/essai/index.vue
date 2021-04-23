@@ -5,7 +5,7 @@
     </aside>
     <el-steps class="app-container" :active="1" finish-status="success" align-center>
       <el-step title="Etape 1" description="les fichiers à fournir" />
-      <el-step title="Etape 2" description="Formulaire d'annex - B" />
+      <el-step title="Etape 2" description="Formulaire d'annexe - B" />
       <el-step title="Etape 3" description="Soumission du dossier" />
     </el-steps>
     <br>

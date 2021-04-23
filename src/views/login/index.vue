@@ -100,9 +100,9 @@
         <el-form-item label="Etablissement">
           <el-input v-model="temp.etablissement" style="width:300px" clearable />
         </el-form-item>
-        <el-form-item label="Au profil de">
+        <!-- <el-form-item label="Au profil de">
           <el-input v-model="temp.auProfilDe" style="width:300px" clearable />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="Fonction">
           <el-input v-model="temp.fonction" style="width:300px" clearable />
         </el-form-item>
