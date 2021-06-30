@@ -2,7 +2,8 @@
   <div class="dashboard-editor-container">
     <el-card shadow="never" :body-style="{ padding: '20px',borderRadius: '4px' }">
 
-      <table class="balance">
+      <el-skeleton v-if="postForm.createdAt === ''" :rows="5" animated />
+      <table v-else class="balance">
 				<tr>
 					<th><span contenteditable>Référence:</span></th>
 					<td><span>{{ postForm.id | getId }} </span></td>
@@ -228,7 +229,7 @@
         <template slot="title">
           <span class="headon"> Mes fichiers</span>
         </template>
-        <div v-if="(postForm.evaluatedBy && postForm.evaluatedBy === id) || (postForm.createdBy._id === id) ||  roles.includes('valid')" style="padding: 40px">
+        <div v-if="(postForm.evaluatedBy && postForm.evaluatedBy === id) || (postForm.createdBy._id === id) ||  roles.includes('valid') ||  roles.includes('admin')" style="padding: 40px">
           <FileUploaderEdit :doc.sync="postForm.declarationAssurance" commit="declarationAssurance" context-description="Lettre mandat du sponsor à la CRO" />
           <FileUploaderEdit :doc.sync="postForm.lettreMandat" commit="lettreMandat" context-description="Attestation d'assurance" />
           <FileUploaderEdit :doc.sync="postForm.avisFavorableComiteEthique" commit="avisFavorableComiteEthique" context-description="Avis favorable du comité d'éthique" />
@@ -350,6 +351,7 @@ export default {
   methods: {
     date(date) {
       //return new Date(date).toLocaleDateString("fr-FR",  {year: 'numeric', month: 'long', day: 'numeric' })
+      if(!date || date === 'undefined') return ''
       return new Intl.DateTimeFormat('fr-FR', { dateStyle: 'full', timeStyle: 'long' }).format(new Date(date))
     },
     fetchEssai(id) {

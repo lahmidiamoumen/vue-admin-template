@@ -23,8 +23,7 @@ export const asyncRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
-  
+    redirect: '/dashboard',  
     children: [
       {
         path: 'dashboard',
@@ -94,7 +93,7 @@ export const asyncRoutes = [
     path: '/form',
     component: Layout,
     meta: {
-      roles: ['eval']
+      roles: ['eval', 'admin']
     },
     children: [
       {
@@ -109,7 +108,7 @@ export const asyncRoutes = [
     path: '/evaluateur',
     component: Layout,
     meta: {
-      roles: ['valid']
+      roles: ['valid', 'admin']
     },
     children: [
       {
