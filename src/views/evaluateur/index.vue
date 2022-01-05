@@ -75,6 +75,17 @@
           </el-button>
         </template>
       </el-table-column>
+      <el-table-column align="center" label="Mdp" width="120">
+        <template slot-scope="{ row }">
+          <el-button
+            v-if="row.actif"
+            size="mini"
+            @click="chnagerMDPDialagoue(row)"
+          >
+          Changer
+          </el-button>
+        </template>
+      </el-table-column> 
     </el-table>
 
     <pagination
@@ -84,6 +95,22 @@
       :limit.sync="listQuery.limit"
       @pagination="getList"
     />
+
+    <el-dialog title="Evaluateur" :visible.sync="chnagerMDPopen" width="600px">
+      <el-form label-position="right" style="width: 450px margin-left:50px">
+        <el-form-item label="Choisir un nouveau mot de passe">
+          <el-input v-model="changer.mdp" style="width:300px" clearable />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="chnagerMDPopen = false">
+          Annuler
+        </el-button>
+        <el-button type="primary" @click="chnagerMDPCaller()">
+          Sauvgarder
+        </el-button>
+      </div>
+    </el-dialog>
 
     <el-dialog title="Evaluateur" :visible.sync="dialogFormVisible" width="600px">
       <el-form ref="dataForm" :rules="dom" :model="temp" label-position="right" label-width="160px" style="width: 400px margin-left:50px">
@@ -116,8 +143,7 @@
 </template>
 
 <script>
-import { fetchList, activateEval } from '@/api/user'
-import { createEval } from '@/api/user'
+import { fetchListEval, activateEval, changeMDPcall, createEval } from '@/api/user'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import { validEmail } from '@/utils/validate'
 
@@ -137,6 +163,11 @@ export default {
       }
     }
     return {
+      chnagerMDPopen: false,
+      changer: {
+        id: undefined,
+        mdp: undefined
+      },
       temp: {
         email: '',
         userName: '',
@@ -203,6 +234,23 @@ export default {
       })
     },
     handleCreate() {},
+    chnagerMDPCaller() {
+      changeMDPcall(this.changer).then((response) => {
+        if( response.data.user > 0) { 
+          this.changer.id = undefined
+          this.changer.mdp = undefined
+          this.chnagerMDPopen = false
+          this.$message({
+            message: 'Mot de passe changé avec succès',
+            type: 'success'
+          })
+        }
+      })
+    },
+    chnagerMDPDialagoue(row) {
+      this.changer.id = row._id
+      this.chnagerMDPopen = true
+    },
     handleModifyStatus(row, status) {
       row.actif = status
       activateEval({status: status}, row._id).then(() => {
@@ -214,7 +262,7 @@ export default {
     },
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then((response) => {
+      fetchListEval(this.listQuery).then((response) => {
         console.log(response)
         this.list = response.data.items
         this.total = Number.isNaN(parseInt(response.data.total))

@@ -11,18 +11,28 @@
       <div class="bullshit">
         <div class="bullshit__oops">Votre dossier a été soumis avec succès</div>
         <div class="bullshit__info"> cliquez sur le bouton ci-dessous pour retourner à la page d'accueil.</div>
-                  
-          <router-link :to="'/essai-liste/list'" class="link-type">
+          
+          <router-link to="/essai-liste/list" class="link-type">
             <el-button class="bullshit__return-home" style="">Page d'accueil</el-button>
           </router-link>  
+
+          <router-link to="/pdf/download" class="link-type">
+            <el-button type="primary">
+              Click to download PDF
+            </el-button>
+          </router-link>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 
-export default { name: 'Show'}
+export default { 
+  name: 'Show',
+  computed: mapGetters(['essaiss'])
+}
 </script>
 
 <style lang="scss" scoped>

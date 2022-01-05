@@ -5,8 +5,9 @@ const state = {
   objectif: '',
   rechercheBeneficeIndividuel: true,
   phaseExperimentationClinique: '',
-  essai: '',
+  essai: [],
   etudeBioequivalence: '',
+  etudeObservationnelle: [],
   datePrevuDebut: '',
   dureePrevuDebut: 0,
   medicament: {
@@ -20,17 +21,9 @@ const state = {
     Algerie: '',
     Etranger: ''
   },
-  medicamentEtudie: {
-    denominationSpeciale: '',
-    nomDeCode: '',
-    DCI: '',
-    compositionQualitativeQuantitative: '',
-    posologie: '',
-    principeActif: false,
-    fabricant: '',
-    Algerie: '',
-    Etranger: ''
-  },
+  medicamentEtudie: [],
+  investigateur: [],
+  investigateurFile: '',
   medicamentReference: {
     denominationSpeciale: '',
     DCI: '',
@@ -51,22 +44,51 @@ const state = {
   },
   commite: {
     info: '',
-    date: ''
+    date: '',
+    avis: undefined
+  },
+  assurance: {
+    denomination: '',
+    numero: ''
   },
   status: ''
 }
 
 const mutations = {
+  SET_ID: (state, token) => {
+    state.ref = token
+  },
   SET_STATE: (state, token) => {
-    state = token
+    state.titre = token.titre //Object.assign({}, token)
+    state.objectif= token.objectif,
+    state.rechercheBeneficeIndividuel= token.rechercheBeneficeIndividuel,
+    state.phaseExperimentationClinique= token.phaseExperimentationClinique,
+    state.essai = token.essai
+    state.etudeObservationnelle= token.etudeObservationnelle,
+    state.etudeBioequivalence= token.etudeBioequivalence,
+    state.datePrevuDebut= token.datePrevuDebut,
+    state.dureePrevuDebut= token.dureePrevuDebut,
+    state.medicament= token.medicament,
+    state.medicamentEtudie= token.medicamentEtudie,
+    state.medicamentReference= token.medicamentReference,
+    state.placebo= token.placebo,
+    state.personne= token.personne,
+    state.commite= token.commite,
+    state.assurance = token.assurance
+    state.status= token.status
   }
 }
 
 const actions = {
   createEssai({ commit }, data) {
     return new Promise((resolve, reject) => {
+      commit('SET_STATE', data)
+
+      resolve()
       createEssai(data).then(response => {
         commit('SET_STATE', data)
+        commit('SET_ID', response.data.essai.id)
+
         resolve()
       }).catch(error => {
         reject(error)

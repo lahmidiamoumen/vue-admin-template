@@ -5,7 +5,7 @@
       <el-upload
         class="upload-demo"
         style="width: 100%"
-        :action="'http://localhost:8080/api/essais/uploadEssaiClinique'"
+        :action="'/api/essais/uploadEssaiClinique'"
         :on-error="handelError"
         :on-success="handelSuccess"
         :on-preview="handlePreview"

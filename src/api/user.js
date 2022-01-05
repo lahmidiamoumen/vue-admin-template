@@ -8,6 +8,15 @@ export function login(data) {
   })
 }
 
+
+export function changeMDPcall(data) {
+  return request({
+    url: '/users/changePassword',
+    method: 'post',
+    data
+  })
+}
+
 export function activateEmail(data, id) {
   return request({
     url: `/users/activateEmail/${id}`,
@@ -58,6 +67,14 @@ export function getInfo() {
 export function fetchList(query) {
   return request({
     url: '/users/liste',
+    method: 'get',
+    params: query
+  })
+}
+
+export function fetchListEval(query) {
+  return request({
+    url: '/users/listeEval',
     method: 'get',
     params: query
   })

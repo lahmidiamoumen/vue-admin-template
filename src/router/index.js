@@ -31,7 +31,7 @@ export const asyncRoutes = [
         component: () => import('@/views/dashboard/index'),
         meta: { title: 'Tableau de bord',  icon: 'dashboard' }
       }
-  ]
+    ]
   },
   {
     path: '/essai-liste',
@@ -93,7 +93,7 @@ export const asyncRoutes = [
     path: '/form',
     component: Layout,
     meta: {
-      roles: ['eval', 'admin']
+      roles: ['admin']
     },
     children: [
       {
@@ -105,10 +105,15 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/pdf/download',
+    component: () => import('@/views/pdf/download'),
+    hidden: true
+  },
+  {
     path: '/evaluateur',
     component: Layout,
     meta: {
-      roles: ['valid', 'admin']
+      roles: ['admin']
     },
     children: [
       {

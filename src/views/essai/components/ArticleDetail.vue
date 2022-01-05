@@ -479,9 +479,9 @@ const defaultForm = {
   objectif: '',
   rechercheBeneficeIndividuel: true,
   phaseExperimentationClinique: '',
-  essai: '',
+  essai: [],
   etudeBioequivalence: '',
-  etudeObservationnelle: '',
+  etudeObservationnelle: [],
   datePrevuDebut: '',
   dureePrevuDebut: 0,
   medicament: {
@@ -518,7 +518,7 @@ const defaultForm = {
   },
   commite: {
     info: '',
-    date: '',
+    date: undefined,
     avis: undefined
   },
   assurance: {
@@ -596,7 +596,7 @@ export default {
       uploadPercentage: 0,
       fileList: [],
       options: optionEssai,
-      optionEtude: optionEtude,
+      optionEtude: Object.assign({}, optionEtude),
       postForm: Object.assign({}, defaultForm),
       postMedicamentEtude: Object.assign({}, medicamentEtude),
       postInvestigateur: Object.assign({}, investigateur),
@@ -727,29 +727,40 @@ export default {
     submitForm() {
       const data = { ...this.postForm, ...this.$store.state.files }
       this.$refs.postForm.validate(valid => {
-       if (this.declarationAssurance === '' ||
-                this.lettreMandat === '' ||
-                //this.avisFavorableComiteEthique !== '' ||
-                this.synopsisProtocole === '' ||
-                this.protocoleFinal === '' ||
-                this.crf === '' ||
-                this.rcp === '' ||
-                this.ficheInformationPatient === '' ||
-                //this.modeleFinancier === '' ||
-                this.autorisation === '' ||
-                this.paiement === '' || this.approbations === ''){
+        if(this.crf === '') {
           this.$notify({
-            message: 'Télécharger tout les fichiers obligatoires d\'abord',
+            message: 'Vous devez télécharger le fichier CRF d\'abord.',
             type: 'warning'
           })
-        }
+        } else if(this.avisFavorableComiteEthique === '' && this.postForm.commite.avis === 'favorable') {
+          this.$notify({
+            message: "Vous devez télécharger l'Avis favorable du comité d'éthique d'abord.",
+            type: 'warning'
+          })
+        } else if(this.ficheInformationPatient === '') {
+          this.$notify({
+            message: "Vous devez télécharger la fiche d'information du patient et formulaire de consentement éclairé.",
+            type: 'warning'
+          })
+        } else if(this.declarationAssurance === '') {
+          this.$notify({
+            message: "Vous devez télécharger Attestation d'assurance.",
+            type: 'warning'
+          }) 
+        } else if(this.paiement === '') {
+          this.$notify({
+            message: "Vous devez télécharger la quittance de paiement .",
+            type: 'warning'
+          })
+        } 
+
         else  if ( this.postForm.investigateur === [] && this.postForm.investigateurFile === ''){
           this.$notify({
             message: 'le cahmp investigateur est vide!',
             type: 'warning'
           })
-        }
-        else if (valid) {
+        } else 
+        if (valid) {
           this.loading = true
           this.$store.dispatch('essais/createEssai', data).then(() => {
             // this.$notify({

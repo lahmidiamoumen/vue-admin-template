@@ -10,6 +10,7 @@ const getters = {
   visitedViews: state => state.tagsView.visitedViews,
   cachedViews: state => state.tagsView.cachedViews,
   name: state => state.user.nom,
+  prenom: state => state.user.prenom,
   username: state => state.user.username,
   declarationAssurance: state => state.files.declarationAssurance,
   lettreMandat: state => state.files.lettreMandat,
@@ -18,10 +19,12 @@ const getters = {
   protocoleFinal: state => state.files.protocoleFinal,
   crf: state => state.files.crf,
   rcp: state => state.files.rcp,
+  files: state => state.files,
   ficheInformationPatient: state => state.files.ficheInformationPatient,
   modeleFinancier: state => state.files.modeleFinancier,
   autorisation: state => state.files.autorisation,
   paiement: state => state.files.paiement,
-  approbations: state => state.files.approbations
+  approbations: state => state.files.approbations,
+  essaiss: state => state.essais
 }
 export default getters

@@ -5,6 +5,23 @@
       La liste des promoteurs
     </aside>
     </div>
+
+    <el-dialog title="Evaluateur" :visible.sync="chnagerMDPopen" width="600px">
+      <el-form label-position="right" style="width: 400px margin-left:50px">
+        <el-form-item label="Choisir un nouveau mot de passe">
+          <el-input v-model="changer.mdp" style="width:300px" clearable />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="chnagerMDPopen = false">
+          Annuler
+        </el-button>
+        <el-button type="primary" @click="chnagerMDPCaller()">
+          Sauvgarder
+        </el-button>
+      </div>
+    </el-dialog>
+
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -92,6 +109,17 @@
           </el-button>
         </template>
       </el-table-column>
+      <el-table-column align="center" label="Mdp" width="120">
+        <template slot-scope="{ row }">
+          <el-button
+            v-if="row.actif"
+            size="mini"
+            @click="chnagerMDPDialagoue(row)"
+          >
+          Changer
+          </el-button>
+        </template>
+      </el-table-column> 
     </el-table>
 
     <pagination
@@ -105,7 +133,7 @@
 </template>
 
 <script>
-import { activateAccount, fetchList } from '@/api/user'
+import { activateAccount, fetchList,changeMDPcall } from '@/api/user'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
@@ -124,6 +152,11 @@ export default {
   data() {
    
     return {
+      chnagerMDPopen: false,
+      changer: {
+        id: undefined,
+        mdp: undefined
+      },
       list: [],
       total: 0,
       listLoading: true,
@@ -138,6 +171,23 @@ export default {
     this.getList()
   },
   methods: {
+    chnagerMDPCaller() {
+      changeMDPcall(this.changer).then((response) => {
+        if( response.data.user > 0) { 
+          this.changer.id = undefined
+          this.changer.mdp = undefined
+          this.chnagerMDPopen = false
+          this.$message({
+            message: 'Mot de passe changé avec succès',
+            type: 'success'
+          })``
+        }
+      })
+    },
+    chnagerMDPDialagoue(row) {
+      this.changer.id = row._id
+      this.chnagerMDPopen = true
+    },
     handleModifyStatus(row, status) {
       row.actif = status
       activateAccount({status: status}, row._id).then(() => {

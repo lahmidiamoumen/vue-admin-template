@@ -1,15 +1,15 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="Title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select  v-model="listQuery.status" placeholder="Status" clearable style="width: 90px;margin-left: 8px" class="filter-item">
+      <el-input v-model="listQuery.title" clearable placeholder="Chercher dans titre.." style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-select  v-model="listQuery.status" placeholder="Statut" clearable style="width: 90px;margin-left: 8px" class="filter-item">
         <el-option v-for="item in statusOptions" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
       <el-button v-waves style="margin-left: 8px" class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-        Search
+        Recherche
       </el-button>
       <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-        Export
+        Télécharger 
       </el-button>
     </div>
     
@@ -73,7 +73,7 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="notProm ? getListAll : getList" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="callList" />
   </div>
 </template>
 
@@ -82,6 +82,7 @@ import { fetchList, fetchListAll, handelEssai } from '@/api/essai'
 import { mapGetters } from 'vuex'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import waves from '@/directive/waves' // waves directive
+import { parseTime } from '@/utils'
 
 const statusMap = {
     valide: 'Validé ',
@@ -103,11 +104,7 @@ export default {
     notAdmin () { return !this.roles.includes('admin')}
   },
   created() {
-    if (this.notProm) {
-      this.getListAll()
-    }else{
-      this.getList()
-    }
+    this.callList()
   },
   filters: {
     getId(id){
@@ -150,24 +147,35 @@ export default {
     }
   },
   methods: {
+    callList() {
+      if (this.notProm) {
+        this.getListAll()
+      }else{
+        this.getList()
+      }
+    },
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-        const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
+        const tHeader = ['Ref', 'Titre', 'Objectif', 'Pormoteur', 'Date']
+        const filterVal = ['id', 'titre', 'objectif', 'createdBy', 'createdAt']
         const data = this.formatJson(filterVal)
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: 'table-list'
+          filename: 'Essais-cliniques'
         })
         this.downloadLoading = false
       })
     },
     formatJson(filterVal) {
       return this.list.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
+        if (j === 'id') {
+          return v[j] ? 'EC_' +  String(v[j]).padStart(6, '0') : 'EC_000000';
+        } else if (j === 'createdAt') {
+          return this.timeSince(v[j])
+        } else if (j === 'createdBy') {
+          return v[j].nom + ' ' + v[j].prenom
         } else {
           return v[j]
         }
@@ -175,7 +183,7 @@ export default {
     },
     handleFilter() {
       this.listQuery.page = 1
-      this.getList()
+      this.callList()
     },
     sortChange(data) {
       const { prop, order } = data

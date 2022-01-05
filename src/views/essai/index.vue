@@ -1,7 +1,14 @@
 <template>
   <div class="dashboard-editor-container">
     <aside>
-      Tous les fichiers sont obligatoire
+      Les fichiers obligatoires sont:
+      <ul>
+        <li>CRF</li>
+        <li>Fiche d'information du patient et formulaire de consentement éclairé.</li>
+        <li>Attestation d'assurance.</li>
+        <li>La cover letter.</li>
+        <li>Quittance de paiement.</li>
+      </ul>
     </aside>
     <el-steps class="app-container" :active="1" finish-status="success" align-center>
       <el-step title="Etape 1" description="les fichiers à fournir" />
@@ -10,14 +17,15 @@
     </el-steps>
     <br>
     <el-row class="" :gutter="20">
+       <el-col :sm="{span: 24}" :md="{span: 12}" :lg="{span: 8}" :xl="{span: 8}" :offset="0">
+        <FileUploader :file="crf" :view="crf === ''" commit="crf" context-description="CRF et tout autre documentation qui sera fournie au patient" />
+      </el-col>
+
       <el-col :sm="{span: 24}" :md="{span: 12}" :lg="{span: 8}" :xl="{span: 8}" :offset="0">
-        <FileUploader :file="lettreMandat" :view="lettreMandat === ''" commit="lettreMandat" context-description="Lettre mandat du sponsor à la CRO" />
+        <FileUploader :file="ficheInformationPatient" :view="ficheInformationPatient === ''" commit="ficheInformationPatient" context-description="Fiche d'information du patient et formulaire de consentement éclairé" />
       </el-col>
       <el-col :sm="{span: 24}" :md="{span: 12}" :lg="{span: 8}" :xl="{span: 8}" :offset="0">
         <FileUploader :file="declarationAssurance" :view="declarationAssurance === ''" commit="declarationAssurance" context-description="Attestation d'assurance" />
-      </el-col>
-      <el-col :sm="{span: 24}" :md="{span: 12}" :lg="{span: 8}" :xl="{span: 8}" :offset="0">
-        <FileUploader :file="avisFavorableComiteEthique" :view="avisFavorableComiteEthique === ''" commit="avisFavorableComiteEthique" context-description="Avis favorable du comité d'éthique" />
       </el-col>
     </el-row>
 
@@ -36,17 +44,18 @@
       </el-row>
 
     <el-row class="" :gutter="20">
+    
       <el-col :sm="{span: 24}" :md="{span: 12}" :lg="{span: 8}" :xl="{span: 8}" :offset="0">
-        <FileUploader :file="crf" :view="crf === ''" commit="crf" context-description="CRF et tout autre documentation qui sera fournie au patient" />
+        <FileUploader :file="lettreMandat" :view="lettreMandat === ''" commit="lettreMandat" context-description="Lettre mandat du sponsor à la CRO" />
       </el-col>
 
       <el-col :sm="{span: 24}" :md="{span: 12}" :lg="{span: 8}" :xl="{span: 8}" :offset="0">
         <FileUploader :file="approbations" :view="approbations === ''" commit="approbations" context-description="Approbations des autorités compétentes dans d'autres pays, le cas échéant" />
       </el-col>
-
+      
       <el-col :sm="{span: 24}" :md="{span: 12}" :lg="{span: 8}" :xl="{span: 8}" :offset="0">
-        <FileUploader :file="ficheInformationPatient" :view="ficheInformationPatient === ''" commit="ficheInformationPatient" context-description="Fiche d'information du patient et formulaire de consentement éclairé" />
-      </el-col>
+        <FileUploader :file="avisFavorableComiteEthique" :view="avisFavorableComiteEthique === ''" commit="avisFavorableComiteEthique" context-description="Avis favorable du comité d'éthique" />
+      </el-col>>
     </el-row>
     <el-row>
       <el-col :sm="{span: 24}" :md="{span: 12}" :lg="{span: 8}" :xl="{span: 8}" :offset="0">
