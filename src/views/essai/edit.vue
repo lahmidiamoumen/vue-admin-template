@@ -253,7 +253,7 @@
     <br>
     <el-card v-if="(postForm.evaluatedBy && postForm.evaluatedBy === id && postForm.status !== 'evalue') ||  roles.includes('valid') && postForm.status !== 'valide'" shadow="hover" :body-style="{ padding: '20px' }">
       <div style="float: right; padding: 20px">
-        <el-button :disabled="roles.includes('valid') && postForm.status !== 'evalue'" type="success" style=" width: 200px" size="big" @click="aproved()">
+        <el-button :disabled="roles.includes('valid') && postForm.status !== 'evalue'" type="success" style=" width: 200px" size="big" @click="aprd()">
           Approuvé
         </el-button>
       </div>
@@ -365,7 +365,7 @@ export default {
             if( response.data.essai > 0) {
               this.$notify({
                 title: 'Succès',
-                message: "l'essai clinique validité",
+                message: "Demande d'étude clinique validée",
                 type: 'success',
                 duration: 2000
               })
